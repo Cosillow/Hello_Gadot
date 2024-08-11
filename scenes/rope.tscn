@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjxxbc7q2u1o8"]
+
+[ext_resource type="Script" path="res://scripts/rope.gd" id="1_wuqvt"]
+
+[node name="Rope" type="Node2D"]
+process_physics_priority = 10
+script = ExtResource("1_wuqvt")

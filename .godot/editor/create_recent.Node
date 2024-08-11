@@ -1,0 +1,12 @@
+CollisionShape2D
+Area2D
+Line2D
+Node2D
+Node
+StaticBody2D
+NinePatchRect
+Panel
+ColorRect
+Camera2D
+AnimatedSprite2D
+CharacterBody2D

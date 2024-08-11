@@ -1,0 +1,8 @@
+res://game.tscn
+res://rope.tscn
+res://rope.gd
+res://platform.tscn
+res://scenes/game.tscn
+res://scenes/rope.tscn
+res://scripts/platform_manager.gd
+res://scripts/rope.gd

@@ -1,0 +1,14 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1723406509
+chimpsheet.png::CompressedTexture2D::7955003627891175975::1723239170::1723239170::1::::<><>::
+first-run-animation-Sheet.png::CompressedTexture2D::7629924134872282209::1723239165::1723239165::1::::<><>::
+game.tscn::PackedScene::4375748235586896952::1723406514::0::1::::<><>::uid://dgx80asesftnt::::res://first-run-animation-Sheet.png<>res://scripts/Player.gd<>uid://dt4gve2vhefg3::::res://platform.tscn<>res://scripts/platform_manager.gd<>uid://bjxxbc7q2u1o8::::res://rope.tscn
+icon.svg::CompressedTexture2D::6911777967841295980::1723238761::1723238767::1::::<><>::
+platform.tscn::PackedScene::8553119091465034860::1723403396::0::1::::<><>::
+rope.tscn::PackedScene::3066999396650607029::1723406499::0::1::::<><>::res://scripts/rope.gd
+::res://clips/::1723403219
+::res://scenes/::1723406509
+::res://scripts/::1723406499
+platform_manager.gd::GDScript::-1::1723352073::0::1::::Platform<>Node2D<>::
+Player.gd::GDScript::-1::1723341404::0::1::::Player<>CharacterBody2D<>::
+rope.gd::GDScript::-1::1723406322::0::1::::<>Node2D<>::
