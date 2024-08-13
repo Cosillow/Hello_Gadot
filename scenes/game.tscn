@@ -80,8 +80,9 @@ distance = -38.0
 
 [node name="Player" type="CharacterBody2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(140, 0)
+position = Vector2(-57, -282)
 script = ExtResource("1_jckq7")
+metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 position = Vector2(0.5, 0)
@@ -102,7 +103,6 @@ position_smoothing_speed = 10.0
 ropeLength = 200.0
 constrain = 31.0
 gravityAdjustment = 15.0
-endPin = false
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="Player/Rope"]
 direction = Vector2(0, 1)
@@ -115,19 +115,7 @@ color = Color(0.858824, 0.890196, 0.309804, 1)
 
 [node name="Platform5" parent="Player/Rope" instance=ExtResource("3_pj20w")]
 
-[node name="Rope2" parent="Player/Rope/Platform5" instance=ExtResource("5_6ldxs")]
-ropeLength = 80.0
-constrain = 30.0
-endPin = false
-
-[node name="CPUParticles2D2" type="CPUParticles2D" parent="Player/Rope/Platform5/Rope2"]
-direction = Vector2(0, 1)
-spread = 2.2
-gravity = Vector2(0, 50)
-initial_velocity_min = 36.59
-initial_velocity_max = 182.93
-scale_amount_max = 4.0
-color = Color(0.858824, 0.25098, 0.309804, 1)
+[node name="Node" type="Node" parent="."]
 
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(0, 28)
@@ -146,6 +134,20 @@ script = ExtResource("3_re0w3")
 
 [node name="Platform3" parent="Platforms" instance=ExtResource("3_pj20w")]
 position = Vector2(-98, 32)
+
+[node name="Rope2" parent="Platforms/Platform3" instance=ExtResource("5_6ldxs")]
+position = Vector2(40, -277)
+ropeLength = 80.0
+constrain = 30.0
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="Platforms/Platform3/Rope2"]
+direction = Vector2(0, 1)
+spread = 2.2
+gravity = Vector2(0, 50)
+initial_velocity_min = 36.59
+initial_velocity_max = 182.93
+scale_amount_max = 4.0
+color = Color(0.858824, 0.25098, 0.309804, 1)
 
 [node name="Platform2" parent="Platforms" instance=ExtResource("3_pj20w")]
 position = Vector2(-148, -18)

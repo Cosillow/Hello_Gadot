@@ -11,7 +11,7 @@ func _input(event):
 		for c in platforms:
 			c.queue_free()
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_pressed("add_platform"):
 		var p := platform.instantiate()
 		add_child(p)
