@@ -60,6 +60,11 @@ extends Node2D
 @export_range(0.1, 0.9, .01) var dampening: float = 0.9
 @export var color: Color = Color(0.648, 0.389, 0.056)
 @export_range(1, 9999999, 1, "or_greater") var width: float = 2
+@export var attached: Node2D = null :
+	set(val):
+		attached = val
+		update_configuration_warnings()
+		assert(_is_attached_processed_first())
 @onready var prGravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")/50
 
 var _point_count: int
@@ -91,12 +96,13 @@ func _ready()->void:
 	_update_children()
 
 func _physics_process(delta)->void:
-	assert(get_parent() is Node2D)
+	assert(_is_attached_processed_first())
+	
 	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
 	_update_points(delta)
 	
 	# allow children to affect rope before constraints
-	#_calculate_new_endpoint()
+	_calculate_new_endpoint()
 	
 	# tighten rope more if it exceeds ropeLength
 	var distSq = _pos[0].distance_squared_to(_pos[_point_count-1])
@@ -108,28 +114,29 @@ func _physics_process(delta)->void:
 	if _parent_cache:
 		set_start(_parent_cache.position)
 	_update_children()
+	if attached:
+		attached.position = _pos[_point_count-1]
 	queue_redraw()
 
 func _get_configuration_warnings():
 	var warnings = []
-
+	
 	if !(get_parent() is Node2D):
-		warnings.append("Parent must be Node2D")
-
+		warnings.append("parent must be Node2D")
+	
 	if constrain >= ropeLength:
 		warnings.append("`constrain` must be <= `ropeLength`")
-
+		
+	if !_is_attached_processed_first():
+		warnings.append("`attached` Node2d must be before rope in tree (such that it is processed first)")
 	# Returning an empty array means "no warning".
 	return warnings
 
 func _notification(what):
 	match what:
 		NOTIFICATION_PARENTED:
-			var p = get_parent()
-			if !(p is Node2D):
-				_parent_cache = null
-				return
-			_parent_cache = p
+			_parent_cache = get_parent()
+			assert(_parent_cache is Node2D)
 		NOTIFICATION_UNPARENTED:
 			_parent_cache = null
 
@@ -138,21 +145,22 @@ func set_start(p:Vector2)->void:
 	_pos_prev[0] = p
 
 func _calculate_new_endpoint() -> void:
-	var sum = Vector2.ZERO
-	var count = 0
-	for c in get_children():
-		if c is Node2D:
-			sum += c.global_position
-			count += 1
-	if count == 0:
-		# No children, use current end point
-		return
-	var average_global_position = sum / count
+	if not attached: return
+	#var sum = Vector2.ZERO
+	#var count = 0
+	#for c in get_children():
+		#if c is Node2D:
+			#sum += c.global_position
+			#count += 1
+	#if count == 0:
+		## No children, use current end point
+		#return
+	#var average_global_position = sum / count
 
 	# consider current endpoint global_position and children global_position
 	# TODO: may need to work on the ratio
 	var new_endpoint = _pos[_point_count-1]
-	new_endpoint.x = (new_endpoint.x + average_global_position.x) / 2
+	new_endpoint.x = (new_endpoint.x + attached.position.x) / 2
 	# Optionally consider the y global_position if the rope swings
 	#new_endpoint.y = average_global_position.y
 	_pos[_point_count-1] = new_endpoint
@@ -160,7 +168,6 @@ func _calculate_new_endpoint() -> void:
 func _update_children()->void:
 	for c in get_children():
 		if c is Node2D:
-			#c.set_deferred("position", _pos[_point_count-1] - _translation)
 			c.position = _pos[_point_count-1] - _translation
 
 func _update_points(delta)->void:
@@ -196,6 +203,12 @@ func _update_constrain()->void:
 			#else:
 			_pos[i] -= vec2 * (percent/2)
 			_pos[i+1] += vec2 * (percent/2)
+
+func _is_attached_processed_first()-> bool:
+	## return true if the attached node will run its _process and _physics_process methods prior to self
+	if (not attached) or (not attached.is_inside_tree()): return true
+	if not is_inside_tree(): return true
+	return is_greater_than(attached)
 
 func _draw() -> void:
 	var rope := finalPosition

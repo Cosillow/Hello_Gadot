@@ -80,7 +80,7 @@ distance = -38.0
 
 [node name="Player" type="CharacterBody2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(152, -58.996)
+position = Vector2(152.006, -492.998)
 script = ExtResource("1_jckq7")
 metadata/_edit_group_ = true
 
@@ -99,16 +99,8 @@ sprite_frames = SubResource("SpriteFrames_wsp33")
 autoplay = "default"
 frame_progress = 0.948955
 
-[node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
-position = Vector2(152, -276)
-
-[node name="Rope" parent="Platform" instance=ExtResource("5_6ldxs")]
-ropeLength = 220.0
-constrain = 31.0
-gravityAdjustment = 15.0
-
-[node name="CPUParticles2D3" type="CPUParticles2D" parent="Platform/Rope"]
-position = Vector2(0, 217.004)
+[node name="CPUParticles2D3" type="CPUParticles2D" parent="Player"]
+position = Vector2(0, -3.8147e-06)
 direction = Vector2(0, 1)
 spread = 2.2
 gravity = Vector2(0, 50)
@@ -116,6 +108,14 @@ initial_velocity_min = 36.59
 initial_velocity_max = 182.93
 scale_amount_max = 4.0
 color = Color(0.858824, 0.890196, 0.309804, 1)
+
+[node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
+position = Vector2(152, -276)
+
+[node name="Rope" parent="Platform" node_paths=PackedStringArray("attached") instance=ExtResource("5_6ldxs")]
+ropeLength = 220.0
+constrain = 31.0
+attached = NodePath("../../Player")
 
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(0, 28)
