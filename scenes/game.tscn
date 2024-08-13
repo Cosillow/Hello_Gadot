@@ -78,35 +78,44 @@ distance = -38.0
 
 [node name="Game" type="Node2D"]
 
-[node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
-position = Vector2(152, -276)
-
-[node name="Rope" parent="Platform" instance=ExtResource("5_6ldxs")]
-position = Vector2(-57, -282)
-ropeLength = 200.0
-constrain = 31.0
-gravityAdjustment = 15.0
-
-[node name="Player" type="CharacterBody2D" parent="Platform/Rope"]
+[node name="Player" type="CharacterBody2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(42, 396)
+position = Vector2(152, -58.996)
 script = ExtResource("1_jckq7")
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform/Rope/Player"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_bofo1")
 
-[node name="Camera2D" type="Camera2D" parent="Platform/Rope/Player"]
+[node name="Camera2D" type="Camera2D" parent="Player"]
 offset = Vector2(0, -87)
 zoom = Vector2(1.24, 1.24)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Platform/Rope/Player"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
 sprite_frames = SubResource("SpriteFrames_wsp33")
 autoplay = "default"
 frame_progress = 0.948955
+
+[node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
+position = Vector2(152, -276)
+
+[node name="Rope" parent="Platform" instance=ExtResource("5_6ldxs")]
+ropeLength = 220.0
+constrain = 31.0
+gravityAdjustment = 15.0
+
+[node name="CPUParticles2D3" type="CPUParticles2D" parent="Platform/Rope"]
+position = Vector2(0, 217.004)
+direction = Vector2(0, 1)
+spread = 2.2
+gravity = Vector2(0, 50)
+initial_velocity_min = 36.59
+initial_velocity_max = 182.93
+scale_amount_max = 4.0
+color = Color(0.858824, 0.890196, 0.309804, 1)
 
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(0, 28)
@@ -120,16 +129,6 @@ points = PackedVector2Array(-1075, 0, 1087, 0)
 width = 1.0
 default_color = Color(0.577008, 0.577008, 0.577008, 1)
 
-[node name="CPUParticles2D3" type="CPUParticles2D" parent="Floor"]
-position = Vector2(-57, -310)
-direction = Vector2(0, 1)
-spread = 2.2
-gravity = Vector2(0, 50)
-initial_velocity_min = 36.59
-initial_velocity_max = 182.93
-scale_amount_max = 4.0
-color = Color(0.858824, 0.890196, 0.309804, 1)
-
 [node name="SwingingPlatform" parent="." instance=ExtResource("4_8el7i")]
 position = Vector2(-179, -229)
 distance = 300.0
@@ -142,3 +141,5 @@ distance = 400.0
 [node name="SwingingPlatform3" parent="." instance=ExtResource("4_8el7i")]
 position = Vector2(-303, -227)
 distance = 500.0
+
+[node name="Node" type="Node" parent="."]

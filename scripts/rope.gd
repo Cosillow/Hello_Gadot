@@ -1,3 +1,4 @@
+@tool
 class_name Rope
 extends Node2D
 
@@ -21,11 +22,28 @@ extends Node2D
 # TODO: this is close ^^ with _calculate_new_endpoint(), but it doesn't take into account the fact that the player is still being
 #		affected by its physics update even after its position is set. defered set doesn't seem to work either (player is locked to endpoint)
 
+# IDEA: I can keep the parent child structure because that is helpful for quickly setting up static scenes with ropes
+#		if I want a player to be attached, there needs to be an export variable for the player. I will keep the player in the top of all scenes,
+#		ensuring its _physics_process() runs before all ropes, allowing the affected endpoint to be calculated based on the characters already calculated position
+# ** keep the game tree like this and all should be good? **
+#┖╴root
+   #┠╴Character (you are here!)
+   #┃  ┠╴Sword
+   #┃  ┖╴Backpack
+   #┃     ┖╴Dagger
+   #┠╴MyGame
+   #┖╴Swamp
+	  #┠╴Rope
+	  #┠╴Rope
+	  #┖╴Goblin
+# TODO: assert/node warning setup thing that only allows rope parent to be Node2d
+
 @export var ropeLength:float = 30 :
 	set(val):
 		if val == ropeLength:
 			return
 		ropeLength = val
+		_point_count = int(ceil(ropeLength / constrain))
 		call_deferred("_ready")
 @export var tightness: int = 100 ## constraint iterations (a ratio more iterations will be applied if rope exceeds length)
 @export_range(1, 9999999, 1, "or_greater") var constrain: float = 1 : ## distance between points (must be < ropeLength)
@@ -33,6 +51,7 @@ extends Node2D
 		if val == constrain:
 			return
 		constrain =  max(1, min(val, ropeLength - 0.1))
+		_point_count = int(ceil(ropeLength / constrain))
 		call_deferred("_ready")
 @export var gravityAdjustment: float = 0 :
 	set(val):
@@ -58,7 +77,7 @@ var finalPosition: PackedVector2Array :
 
 func _ready()->void:
 	gravityAdjustment = gravityAdjustment # just so that the onready prGravity is added with setter
-	_point_count = int(ceil(ropeLength / constrain))
+	#_point_count = int(ceil(ropeLength / constrain))
 	
 	# resize arrays
 	_pos.resize(_point_count)
@@ -71,18 +90,8 @@ func _ready()->void:
 		_pos_prev[i] = global_position + Vector2(0, constrain *i)
 	_update_children()
 
-func _notification(what):
-	match what:
-		NOTIFICATION_PARENTED:
-			var p = get_parent()
-			if !(p is Node2D):
-				_parent_cache = null
-				return
-			_parent_cache = p
-		NOTIFICATION_UNPARENTED:
-			_parent_cache = null
-
 func _physics_process(delta)->void:
+	assert(get_parent() is Node2D)
 	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
 	_update_points(delta)
 	
@@ -100,6 +109,29 @@ func _physics_process(delta)->void:
 		set_start(_parent_cache.position)
 	_update_children()
 	queue_redraw()
+
+func _get_configuration_warnings():
+	var warnings = []
+
+	if !(get_parent() is Node2D):
+		warnings.append("Parent must be Node2D")
+
+	if constrain >= ropeLength:
+		warnings.append("`constrain` must be <= `ropeLength`")
+
+	# Returning an empty array means "no warning".
+	return warnings
+
+func _notification(what):
+	match what:
+		NOTIFICATION_PARENTED:
+			var p = get_parent()
+			if !(p is Node2D):
+				_parent_cache = null
+				return
+			_parent_cache = p
+		NOTIFICATION_UNPARENTED:
+			_parent_cache = null
 
 func set_start(p:Vector2)->void:
 	_pos[0] = p
@@ -122,7 +154,7 @@ func _calculate_new_endpoint() -> void:
 	var new_endpoint = _pos[_point_count-1]
 	new_endpoint.x = (new_endpoint.x + average_global_position.x) / 2
 	# Optionally consider the y global_position if the rope swings
-	# new_endpoint.y = average_position.y
+	#new_endpoint.y = average_global_position.y
 	_pos[_point_count-1] = new_endpoint
 
 func _update_children()->void:

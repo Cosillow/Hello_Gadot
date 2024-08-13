@@ -13,12 +13,7 @@ var _target: Vector2 = Vector2.ZERO
 var _error: Vector2 = Vector2.ZERO
 
 func _physics_process(delta: float) -> void:
-	
-	#if abs(top_platform.position - _target) - _error < Vector2.ZERO:
-		#_target.x = abs(_target.x - distance)
-	#top_platform.position = top_platform.position.lerp(_target, time * delta)
-	
-	# Calculate the distance to the target
+		# Calculate the distance to the target
 	var diff = _target - top_platform.position
 	
 	# Check if the platform is close enough to the target
