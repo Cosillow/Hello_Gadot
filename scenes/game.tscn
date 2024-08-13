@@ -1,9 +1,9 @@
 [gd_scene load_steps=17 format=3 uid="uid://b3lv604ivlupc"]
 
 [ext_resource type="Texture2D" uid="uid://dgx80asesftnt" path="res://first-run-animation-Sheet.png" id="1_7wfx2"]
+[ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/Platform.tscn" id="1_8hn6c"]
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_jckq7"]
-[ext_resource type="PackedScene" uid="uid://dt4gve2vhefg3" path="res://scenes/platform.tscn" id="3_pj20w"]
-[ext_resource type="Script" path="res://scripts/platform_manager.gd" id="3_re0w3"]
+[ext_resource type="PackedScene" uid="uid://1xojv1oq0tpf" path="res://scenes/SwingingPlatform.tscn" id="4_8el7i"]
 [ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://scenes/rope.tscn" id="5_6ldxs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bofo1"]
@@ -78,44 +78,35 @@ distance = -38.0
 
 [node name="Game" type="Node2D"]
 
-[node name="Player" type="CharacterBody2D" parent="."]
-unique_name_in_owner = true
+[node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
+position = Vector2(152, -276)
+
+[node name="Rope" parent="Platform" instance=ExtResource("5_6ldxs")]
 position = Vector2(-57, -282)
-script = ExtResource("1_jckq7")
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-position = Vector2(0.5, 0)
-shape = SubResource("RectangleShape2D_bofo1")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
-sprite_frames = SubResource("SpriteFrames_wsp33")
-autoplay = "default"
-frame_progress = 0.948955
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-offset = Vector2(0, 140)
-zoom = Vector2(1.49, 1.49)
-position_smoothing_enabled = true
-position_smoothing_speed = 10.0
-
-[node name="Rope" parent="Player" instance=ExtResource("5_6ldxs")]
 ropeLength = 200.0
 constrain = 31.0
 gravityAdjustment = 15.0
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="Player/Rope"]
-direction = Vector2(0, 1)
-spread = 2.2
-gravity = Vector2(0, 50)
-initial_velocity_min = 36.59
-initial_velocity_max = 182.93
-scale_amount_max = 4.0
-color = Color(0.858824, 0.890196, 0.309804, 1)
+[node name="Player" type="CharacterBody2D" parent="Platform/Rope"]
+unique_name_in_owner = true
+position = Vector2(42, 396)
+script = ExtResource("1_jckq7")
+metadata/_edit_group_ = true
 
-[node name="Platform5" parent="Player/Rope" instance=ExtResource("3_pj20w")]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform/Rope/Player"]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_bofo1")
 
-[node name="Node" type="Node" parent="."]
+[node name="Camera2D" type="Camera2D" parent="Platform/Rope/Player"]
+offset = Vector2(0, -87)
+zoom = Vector2(1.24, 1.24)
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Platform/Rope/Player"]
+sprite_frames = SubResource("SpriteFrames_wsp33")
+autoplay = "default"
+frame_progress = 0.948955
 
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(0, 28)
@@ -129,31 +120,25 @@ points = PackedVector2Array(-1075, 0, 1087, 0)
 width = 1.0
 default_color = Color(0.577008, 0.577008, 0.577008, 1)
 
-[node name="Platforms" type="Node2D" parent="."]
-script = ExtResource("3_re0w3")
-
-[node name="Platform3" parent="Platforms" instance=ExtResource("3_pj20w")]
-position = Vector2(-98, 32)
-
-[node name="Rope2" parent="Platforms/Platform3" instance=ExtResource("5_6ldxs")]
-position = Vector2(40, -277)
-ropeLength = 80.0
-constrain = 30.0
-
-[node name="CPUParticles2D2" type="CPUParticles2D" parent="Platforms/Platform3/Rope2"]
+[node name="CPUParticles2D3" type="CPUParticles2D" parent="Floor"]
+position = Vector2(-57, -310)
 direction = Vector2(0, 1)
 spread = 2.2
 gravity = Vector2(0, 50)
 initial_velocity_min = 36.59
 initial_velocity_max = 182.93
 scale_amount_max = 4.0
-color = Color(0.858824, 0.25098, 0.309804, 1)
+color = Color(0.858824, 0.890196, 0.309804, 1)
 
-[node name="Platform2" parent="Platforms" instance=ExtResource("3_pj20w")]
-position = Vector2(-148, -18)
+[node name="SwingingPlatform" parent="." instance=ExtResource("4_8el7i")]
+position = Vector2(-179, -229)
+distance = 300.0
+time = 1.0
 
-[node name="Platform" parent="Platforms" instance=ExtResource("3_pj20w")]
-position = Vector2(139, 37)
+[node name="SwingingPlatform2" parent="." instance=ExtResource("4_8el7i")]
+position = Vector2(-239, -273)
+distance = 400.0
 
-[node name="Platform4" parent="Platforms" instance=ExtResource("3_pj20w")]
-position = Vector2(58, -7)
+[node name="SwingingPlatform3" parent="." instance=ExtResource("4_8el7i")]
+position = Vector2(-303, -227)
+distance = 500.0

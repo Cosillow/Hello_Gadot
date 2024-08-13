@@ -12,6 +12,15 @@ extends Node2D
 #		be using global position some places instead?
 # TODO: detatch from parent or detatch children? only if necessary for other objects
 
+# IDEA: because the children update first, they will be displaced from the actual endpoint of the rope
+#		so, (only taking into account their x position probably {although, I'm considering the situation where the end 
+#		of the rope has swung up and yPos would give a better feeling of weight}) we could average or use a `childrens affect`
+#		ratio to determine where the new end point should be. My question is, when do I do this? I suspect it must
+#		be before the constraints (which means after we would still have to set the children back to the end result)
+#		possibly even we have to do this before the points are updated. I'm unsure
+# TODO: this is close ^^ with _calculate_new_endpoint(), but it doesn't take into account the fact that the player is still being
+#		affected by its physics update even after its position is set. defered set doesn't seem to work either (player is locked to endpoint)
+
 @export var ropeLength:float = 30 :
 	set(val):
 		if val == ropeLength:
@@ -77,6 +86,9 @@ func _physics_process(delta)->void:
 	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
 	_update_points(delta)
 	
+	# allow children to affect rope before constraints
+	#_calculate_new_endpoint()
+	
 	# tighten rope more if it exceeds ropeLength
 	var distSq = _pos[0].distance_squared_to(_pos[_point_count-1])
 	var possibleError = distSq / pow(ropeLength,2)
@@ -93,9 +105,30 @@ func set_start(p:Vector2)->void:
 	_pos[0] = p
 	_pos_prev[0] = p
 
+func _calculate_new_endpoint() -> void:
+	var sum = Vector2.ZERO
+	var count = 0
+	for c in get_children():
+		if c is Node2D:
+			sum += c.global_position
+			count += 1
+	if count == 0:
+		# No children, use current end point
+		return
+	var average_global_position = sum / count
+
+	# consider current endpoint global_position and children global_position
+	# TODO: may need to work on the ratio
+	var new_endpoint = _pos[_point_count-1]
+	new_endpoint.x = (new_endpoint.x + average_global_position.x) / 2
+	# Optionally consider the y global_position if the rope swings
+	# new_endpoint.y = average_position.y
+	_pos[_point_count-1] = new_endpoint
+
 func _update_children()->void:
 	for c in get_children():
 		if c is Node2D:
+			#c.set_deferred("position", _pos[_point_count-1] - _translation)
 			c.position = _pos[_point_count-1] - _translation
 
 func _update_points(delta)->void:
