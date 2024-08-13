@@ -37,6 +37,7 @@ extends Node2D
 	  #┠╴Rope
 	  #┖╴Goblin
 # TODO: assert/node warning setup thing that only allows rope parent to be Node2d
+# TODO: remove previous parent cache error handling (now, I just assert parent is Node2d)
 
 @export var ropeLength:float = 30 :
 	set(val):
@@ -80,6 +81,20 @@ var finalPosition: PackedVector2Array :
 	get:
 		return _pos * Transform2D().translated(_translation)
 
+func _get_configuration_warnings():
+	var warnings = []
+	
+	if !(get_parent() is Node2D):
+		warnings.append("parent must be Node2D")
+	
+	if constrain >= ropeLength:
+		warnings.append("`constrain` must be <= `ropeLength`")
+		
+	if !_is_attached_processed_first():
+		warnings.append("`attached` Node2d must be before rope in tree (such that it is processed first)")
+	# Returning an empty array means "no warning".
+	return warnings
+
 func _ready()->void:
 	gravityAdjustment = gravityAdjustment # just so that the onready prGravity is added with setter
 	#_point_count = int(ceil(ropeLength / constrain))
@@ -111,26 +126,11 @@ func _physics_process(delta)->void:
 	for i in iterations:
 		_update_constrain()
 	
-	if _parent_cache:
-		set_start(_parent_cache.position)
+	set_start(_parent_cache.position)
 	_update_children()
 	if attached:
 		attached.position = _pos[_point_count-1]
 	queue_redraw()
-
-func _get_configuration_warnings():
-	var warnings = []
-	
-	if !(get_parent() is Node2D):
-		warnings.append("parent must be Node2D")
-	
-	if constrain >= ropeLength:
-		warnings.append("`constrain` must be <= `ropeLength`")
-		
-	if !_is_attached_processed_first():
-		warnings.append("`attached` Node2d must be before rope in tree (such that it is processed first)")
-	# Returning an empty array means "no warning".
-	return warnings
 
 func _notification(what):
 	match what:
@@ -145,25 +145,17 @@ func set_start(p:Vector2)->void:
 	_pos_prev[0] = p
 
 func _calculate_new_endpoint() -> void:
-	if not attached: return
-	#var sum = Vector2.ZERO
-	#var count = 0
-	#for c in get_children():
-		#if c is Node2D:
-			#sum += c.global_position
-			#count += 1
-	#if count == 0:
-		## No children, use current end point
-		#return
-	#var average_global_position = sum / count
-
-	# consider current endpoint global_position and children global_position
-	# TODO: may need to work on the ratio
-	var new_endpoint = _pos[_point_count-1]
-	new_endpoint.x = (new_endpoint.x + attached.position.x) / 2
-	# Optionally consider the y global_position if the rope swings
-	#new_endpoint.y = average_global_position.y
-	_pos[_point_count-1] = new_endpoint
+	if not attached: return 
+	# TODO: may need to work on the ratio (may or may not want y to affect)
+	# TODO: DEFINITELY need to increase the x velocity based on if the player is being assisted by the rope
+	#		I could tell this via the `Input.get_axis` and where the player is based on the previous point
+	
+	# editor does not agree that the inputs below exist
+	if Engine.is_editor_hint() or Input.get_axis("move_left", "move_right"):
+		_pos[_point_count-1].x = attached.position.x
+		#new_endpoint.x += velocity.x
+		#var velocity = (attached.position - _pos[_point_count-1]) #* dampening
+		#new_endpoint.y += _gravity.y * delta
 
 func _update_children()->void:
 	for c in get_children():
@@ -171,16 +163,13 @@ func _update_children()->void:
 			c.position = _pos[_point_count-1] - _translation
 
 func _update_points(delta)->void:
-	for i in range (_point_count):
-		if (i!=0) || (i==0 && !_parent_cache):
-			var velocity = (_pos[i] -_pos_prev[i]) * dampening
-			_pos_prev[i] = _pos[i]
-			_pos[i] += velocity + (_gravity * delta)
+	for i in range(1, _point_count):
+		var velocity = (_pos[i] -_pos_prev[i]) * dampening
+		_pos_prev[i] = _pos[i]
+		_pos[i] += velocity + (_gravity * delta)
 
 func _update_constrain()->void:
-	for i in range(_point_count):
-		if i == _point_count-1:
-			return
+	for i in range(_point_count-1):
 		var distance = _pos[i].distance_to(_pos[i+1])
 		var difference = constrain - distance
 		var percent = difference / distance
@@ -188,15 +177,11 @@ func _update_constrain()->void:
 		
 		# if first point
 		if i == 0:
-			if _parent_cache:
-				_pos[i+1] += vec2 * percent
-			else:
-				_pos[i] -= vec2 * (percent/2)
-				_pos[i+1] += vec2 * (percent/2)
-		# if last point, skip because no more points after it
-		elif i == _point_count-1:
-			pass
-		# all the rest
+			#if _parent_cache:
+			_pos[i+1] += vec2 * percent
+			#else:
+				#_pos[i] -= vec2 * (percent/2)
+				#_pos[i+1] += vec2 * (percent/2)
 		else:
 			#if i+1 == _point_count-1 && endPin:
 				#_pos[i] -= vec2 * percent
