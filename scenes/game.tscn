@@ -80,7 +80,7 @@ distance = -38.0
 
 [node name="Player" type="CharacterBody2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(152.012, -65.992)
+position = Vector2(258, -295.993)
 script = ExtResource("1_jckq7")
 metadata/_edit_group_ = true
 
@@ -109,13 +109,16 @@ initial_velocity_max = 182.93
 scale_amount_max = 4.0
 color = Color(0.858824, 0.890196, 0.309804, 1)
 
+[node name="Platform2" parent="." instance=ExtResource("1_8hn6c")]
+position = Vector2(225, -81)
+
 [node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
-position = Vector2(152, -276)
+position = Vector2(258, -506)
 
 [node name="Rope" parent="Platform" node_paths=PackedStringArray("attached") instance=ExtResource("5_6ldxs")]
 ropeLength = 220.0
 constrain = 30.0
-gravityAdjustment = 50.0
+gravityAdjustment = 40.0
 attached = NodePath("../../Player")
 
 [node name="Floor" type="StaticBody2D" parent="."]
