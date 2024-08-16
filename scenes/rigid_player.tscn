@@ -78,11 +78,9 @@ animations = [{
 [node name="RigidPlayer" type="RigidBody2D"]
 z_index = 5
 physics_material_override = SubResource("PhysicsMaterial_phg60")
-center_of_mass_mode = 1
 script = ExtResource("1_h10yg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_drmvv")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CollisionShape2D"]

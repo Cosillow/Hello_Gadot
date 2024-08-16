@@ -1,4 +1,4 @@
-@tool
+#@tool
 class_name Rope
 extends Node2D
 
@@ -64,6 +64,7 @@ extends Node2D
 @export var attached: Node2D = null :
 	set(val):
 		attached = val
+		print(attached)
 		update_configuration_warnings()
 		assert(_is_attached_processed_first())
 @onready var prGravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")/50
