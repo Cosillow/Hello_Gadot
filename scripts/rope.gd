@@ -47,7 +47,7 @@ extends Node2D
 		_point_count = int(ceil(ropeLength / constrain))
 		call_deferred("_ready")
 @export var tightness: int = 100 ## constraint iterations (a ratio more iterations will be applied if rope exceeds length)
-@export_range(1, 9999999, 1, "or_greater") var constrain: float = 1 : ## distance between points (must be < ropeLength)
+@export_range(1, 9999999, 1, "or_greater") var constrain: float = 2 : ## distance between points (must be < ropeLength)
 	set(val):
 		if val == constrain:
 			return
@@ -61,7 +61,7 @@ extends Node2D
 @export_range(0.1, 0.9, .01) var dampening: float = 0.9
 @export var color: Color = Color(0.648, 0.389, 0.056)
 @export_range(1, 9999999, 1, "or_greater") var width: float = 2
-@export var attached: CharacterBody2D = null :
+@export var attached: Node2D = null :
 	set(val):
 		attached = val
 		update_configuration_warnings()
@@ -119,10 +119,12 @@ func _physics_process(delta)->void:
 	assert(_is_attached_processed_first())
 	
 	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
+	set_start(_parent_cache.position)
 	_update_points(delta)
 	
-	# allow children to affect rope before constraints
-	_update_new_endpoint(delta)
+	# allow attached to affect rope before constraints
+	if attached:
+		_endpoint = attached.position
 	
 	# tighten rope more if it exceeds ropeLength
 	var distSq = _pos[0].distance_squared_to(_endpoint)
@@ -131,10 +133,11 @@ func _physics_process(delta)->void:
 	for i in iterations:
 		_update_constrain()
 	
-	set_start(_parent_cache.position)
-	_update_children()
+	# visually reattach endpoint to node
 	if attached:
-		attached.position = _endpoint
+		_endpoint = attached.position
+	
+	_update_children()
 	queue_redraw()
 
 func _notification(what):
@@ -148,34 +151,6 @@ func _notification(what):
 func set_start(p:Vector2) -> void:
 	_pos[0] = p
 	_pos_prev[0] = p
-
-func _update_new_endpoint(delta) -> void:
-	# editor does not agree that the inputs below exist
-	if not attached or Engine.is_editor_hint(): return 
-	# TODO: may need to work on the ratio (may or may not want y to affect)
-	# TODO: DEFINITELY need to increase the x velocity based on if the player is being assisted by the rope
-	#		I could tell this via the `Input.get_axis` and where the player is based on the previous point
-	# TODO: THIS SHOULD BE AFFECTING THE PLAYERS VELOCITY RIGHT?? SO THAT IT CAN GAIN MOMENTUM WITH A JUMP OFF THE ROPE?
-	# TODO IDEA: I think I can get hit upward by platforms if I let the endpoint be affected by my y pos/velocity
-	
-	var direction: float = Input.get_axis("move_left", "move_right")
-	if direction or attached.get_last_slide_collision() or attached.is_on_floor():
-		var rope_assistance := Vector2.ZERO
-		#var attat_left_of_rope: bool = attached.global_position.x < global_position.x
-		#if (attat_left_of_rope and direction == 1) or (not attat_left_of_rope and direction == -1):
-		rope_assistance = (_endpoint - _pos_prev[_point_count-1]) #* direction
-			#print(_endpoint - _pos_prev[_point_count-1], rope_assistance)
-		if (_endpoint - _pos_prev[_point_count-1]).x < 0:
-			print(_pos_prev[_point_count-1], _endpoint)
-		_pos_prev[_point_count-1] = _endpoint
-		_endpoint = attached.position #+ (attached.velocity.x * delta)/2
-		_endpoint += rope_assistance
-		#_endpoint.x += (attached.velocity.x * delta)/2
-		#var velocity = (attached.position - _endpoint) #* dampening
-		#_endpoint.x += velocity.x
-		#_endpoint.y += _gravity.y * delta
-	
-		
 
 func _update_children() -> void:
 	for c in get_children():
@@ -218,5 +193,5 @@ func _is_attached_processed_first()-> bool:
 func _draw() -> void:
 	var rope := finalPosition
 	draw_polyline(rope, color, float(width))
-	for p in rope:
-		draw_circle(p, width/1.5, "pink")
+	#for p in rope:
+		#draw_circle(p, width/1.5, "pink")

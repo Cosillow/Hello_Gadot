@@ -8,7 +8,15 @@ const JUMP_VELOCITY = -500.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var animated_sprite = $AnimatedSprite2D
 
+var TEST = 10
+
+
+
 func _physics_process(delta):
+	TEST -= 1
+	
+	if TEST>0:print(velocity)
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta

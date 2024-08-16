@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://1xojv1oq0tpf"]
 
 [ext_resource type="Script" path="res://scripts/SwingingPlatform.gd" id="1_0nnvo"]
-[ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/Platform.tscn" id="2_hgxmw"]
+[ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/platform.tscn" id="2_hgxmw"]
 [ext_resource type="Script" path="res://scripts/rope.gd" id="2_rom6i"]
 
 [node name="SwingingPlatform" type="Node2D"]

@@ -1,128 +1,26 @@
-[gd_scene load_steps=17 format=3 uid="uid://b3lv604ivlupc"]
+[gd_scene load_steps=5 format=3 uid="uid://b3lv604ivlupc"]
 
-[ext_resource type="Texture2D" uid="uid://dgx80asesftnt" path="res://first-run-animation-Sheet.png" id="1_7wfx2"]
-[ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/Platform.tscn" id="1_8hn6c"]
-[ext_resource type="Script" path="res://scripts/Player.gd" id="1_jckq7"]
+[ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/platform.tscn" id="1_8hn6c"]
+[ext_resource type="PackedScene" uid="uid://dfs27r521w8gb" path="res://scenes/player.tscn" id="2_r6xbm"]
 [ext_resource type="PackedScene" uid="uid://1xojv1oq0tpf" path="res://scenes/SwingingPlatform.tscn" id="4_8el7i"]
-[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://scenes/rope.tscn" id="5_6ldxs"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bofo1"]
-size = Vector2(21, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uuy3t"]
-atlas = ExtResource("1_7wfx2")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5mmgt"]
-atlas = ExtResource("1_7wfx2")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3eitj"]
-atlas = ExtResource("1_7wfx2")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kwf1f"]
-atlas = ExtResource("1_7wfx2")
-region = Rect2(96, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mt71n"]
-atlas = ExtResource("1_7wfx2")
-region = Rect2(128, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qw63c"]
-atlas = ExtResource("1_7wfx2")
-region = Rect2(160, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y4o14"]
-atlas = ExtResource("1_7wfx2")
-region = Rect2(192, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5e6v4"]
-atlas = ExtResource("1_7wfx2")
-region = Rect2(224, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_wsp33"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_uuy3t")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5mmgt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3eitj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kwf1f")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mt71n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qw63c")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_y4o14")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5e6v4")
-}],
-"loop": true,
-"name": &"default",
-"speed": 10.0
-}]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pf6o7"]
-distance = -38.0
+distance = -27.0
 
 [node name="Game" type="Node2D"]
 
-[node name="Player" type="CharacterBody2D" parent="."]
-unique_name_in_owner = true
-position = Vector2(258, -295.993)
-script = ExtResource("1_jckq7")
-metadata/_edit_group_ = true
+[node name="DampedSpringJoint2D" type="DampedSpringJoint2D" parent="."]
+position = Vector2(565, -182)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-position = Vector2(0.5, 0)
-shape = SubResource("RectangleShape2D_bofo1")
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-offset = Vector2(0, -87)
-zoom = Vector2(1.24, 1.24)
-position_smoothing_enabled = true
-position_smoothing_speed = 10.0
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
-sprite_frames = SubResource("SpriteFrames_wsp33")
-autoplay = "default"
-frame_progress = 0.948955
-
-[node name="CPUParticles2D3" type="CPUParticles2D" parent="Player"]
-position = Vector2(0, -3.8147e-06)
-direction = Vector2(0, 1)
-spread = 2.2
-gravity = Vector2(0, 50)
-initial_velocity_min = 36.59
-initial_velocity_max = 182.93
-scale_amount_max = 4.0
-color = Color(0.858824, 0.890196, 0.309804, 1)
-
-[node name="Platform2" parent="." instance=ExtResource("1_8hn6c")]
-position = Vector2(225, -81)
+[node name="Player" parent="." instance=ExtResource("2_r6xbm")]
 
 [node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
-position = Vector2(258, -506)
+position = Vector2(569, -238)
 
-[node name="Rope" parent="Platform" node_paths=PackedStringArray("attached") instance=ExtResource("5_6ldxs")]
-ropeLength = 220.0
-constrain = 30.0
-gravityAdjustment = 40.0
-attached = NodePath("../../Player")
+[node name="Platform2" parent="." instance=ExtResource("1_8hn6c")]
+position = Vector2(149, -41)
 
 [node name="Floor" type="StaticBody2D" parent="."]
-position = Vector2(0, 28)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
 shape = SubResource("WorldBoundaryShape2D_pf6o7")
@@ -134,14 +32,16 @@ width = 1.0
 default_color = Color(0.577008, 0.577008, 0.577008, 1)
 
 [node name="SwingingPlatform" parent="." instance=ExtResource("4_8el7i")]
-position = Vector2(-179, -229)
-distance = 300.0
-time = 1.0
+position = Vector2(207, -408)
+distance = 100.0
+time = 4.0
 
 [node name="SwingingPlatform2" parent="." instance=ExtResource("4_8el7i")]
 position = Vector2(-239, -273)
-distance = 400.0
+distance = 100.0
+time = 4.0
 
 [node name="SwingingPlatform3" parent="." instance=ExtResource("4_8el7i")]
 position = Vector2(-303, -227)
-distance = 500.0
+distance = 100.0
+time = 4.0
