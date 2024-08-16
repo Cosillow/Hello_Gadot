@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://b1iw8hn81mj0w"]
+[gd_scene load_steps=7 format=3 uid="uid://b1iw8hn81mj0w"]
 
 [ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="1_82kyp"]
 [ext_resource type="PackedScene" uid="uid://bjrwrl5n4ev21" path="res://scenes/rigid_player.tscn" id="1_j1xu6"]
+[ext_resource type="PackedScene" uid="uid://1xojv1oq0tpf" path="res://scenes/SwingingPlatform.tscn" id="2_rqgnu"]
+[ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/platform.tscn" id="4_7vnmx"]
 [ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://scenes/rope.tscn" id="4_51orl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hbe1n"]
@@ -9,7 +11,14 @@ size = Vector2(124, 122)
 
 [node name="Node2D" type="Node2D"]
 
-[node name="RigidPlayer" parent="." instance=ExtResource("1_j1xu6")]
+[node name="RigidPlayer2" parent="." node_paths=PackedStringArray("rope") instance=ExtResource("1_j1xu6")]
+position = Vector2(401, 79)
+rope = NodePath("../StaticBody2D2/Rope")
+
+[node name="Camera2D" type="Camera2D" parent="RigidPlayer2"]
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="."]
 position = Vector2(400, -100)
@@ -22,14 +31,24 @@ shape = SubResource("RectangleShape2D_hbe1n")
 
 [node name="Rope" parent="StaticBody2D2" node_paths=PackedStringArray("attached") instance=ExtResource("4_51orl")]
 ropeLength = 175.0
+tightness = 40
 constrain = 6.0
-gravityAdjustment = 30.0
-attached = NodePath("../../RigidPlayer")
+gravityAdjustment = -20.0
+width = 5.0
+attached = NodePath("../../RigidPlayer2/CollisionShape2D")
 
 [node name="PinJoint2D" type="PinJoint2D" parent="StaticBody2D2"]
 node_a = NodePath("..")
-node_b = NodePath("../../RigidPlayer")
+node_b = NodePath("../../RigidPlayer2")
 softness = 5.0
 angular_limit_enabled = true
 angular_limit_lower = -0.698132
 angular_limit_upper = 0.698132
+
+[node name="SwingingPlatform" parent="." instance=ExtResource("2_rqgnu")]
+position = Vector2(194, -203)
+
+[node name="Platform" parent="." instance=ExtResource("4_7vnmx")]
+position = Vector2(394, -237)
+
+[editable path="RigidPlayer2"]

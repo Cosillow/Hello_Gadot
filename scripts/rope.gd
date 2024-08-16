@@ -82,6 +82,9 @@ var _translation: Vector2 :
 	get:
 		return _parent_cache.position if _parent_cache else Vector2.ZERO
 
+var endDirection: Vector2 :
+	get:
+		return _pos[_point_count-2].direction_to(_endpoint)
 var finalPosition: PackedVector2Array :
 	get:
 		return _pos * Transform2D().translated(_translation)
@@ -124,7 +127,7 @@ func _physics_process(delta)->void:
 	
 	# allow attached to affect rope before constraints
 	if attached:
-		_endpoint = attached.position
+		_endpoint = attached.global_position
 	
 	# tighten rope more if it exceeds ropeLength
 	var distSq = _pos[0].distance_squared_to(_endpoint)
@@ -135,7 +138,7 @@ func _physics_process(delta)->void:
 	
 	# visually reattach endpoint to node
 	if attached:
-		_endpoint = attached.position
+		_endpoint = attached.global_position
 	
 	_update_children()
 	queue_redraw()
