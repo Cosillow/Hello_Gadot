@@ -7,14 +7,13 @@
 
 [node name="Node2D" type="Node2D"]
 
-[node name="RigidPlayer2" parent="." node_paths=PackedStringArray("ropeSwing") instance=ExtResource("1_j1xu6")]
+[node name="RigidPlayer2" parent="." node_paths=PackedStringArray("rope_swing") instance=ExtResource("1_j1xu6")]
 position = Vector2(401, 79)
-ropeSwing = NodePath("../RopeSwing")
+angular_damp_mode = 1
+angular_damp = 1.2
+rope_swing = NodePath("../RopeSwing")
 
 [node name="Camera2D" type="Camera2D" parent="RigidPlayer2"]
-zoom = Vector2(2, 2)
-position_smoothing_enabled = true
-position_smoothing_speed = 10.0
 
 [node name="RopeSwing" parent="." node_paths=PackedStringArray("attachedBody", "ropeAnchorNode") instance=ExtResource("2_3sr81")]
 script = ExtResource("3_fchea")
@@ -22,7 +21,6 @@ attachedBody = NodePath("../RigidPlayer2")
 ropeAnchorNode = NodePath("../RigidPlayer2/CollisionShape2D")
 
 [node name="Rope" parent="RopeSwing" index="1" node_paths=PackedStringArray("attached")]
-gravityAdjustment = 30.0
 attached = NodePath("../../RigidPlayer2/CollisionShape2D")
 
 [node name="PinJoint2D" parent="RopeSwing" index="3"]

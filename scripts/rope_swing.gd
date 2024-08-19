@@ -20,6 +20,7 @@ func attach_player(player: RigidPlayer):
 	player.rope = rope
 
 func detach():
+	# TODO: take in final veloctiy to make rope look more realistic on detach
 	attachedBody = null
 	ropeAnchorNode = null
 	rope.attached = null

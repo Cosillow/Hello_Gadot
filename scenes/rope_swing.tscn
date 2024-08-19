@@ -16,7 +16,6 @@ shape = SubResource("RectangleShape2D_hbe1n")
 ropeLength = 175.0
 tightness = 40
 constrain = 6.0
-gravityAdjustment = -20.0
 width = 5.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

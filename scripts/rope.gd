@@ -3,7 +3,7 @@ class_name Rope
 extends Node2D
 
 # TODO: CURRENTLY... the _parent_cache must be of Node2d... otherwise it crashes
-#		idk what the behavior should be for that, probably just fall to _gravity?
+#		idk what the behavior should be for that, probably just fall to gravity?
 #		also... I have zero error checking if there is no _parent_cache
 # TODO: boolean exports for the rope just affecting the _parent_cache/child velocity, not just setting position
 # TODO: ropeSize is not an exact science, because of the constraint size
@@ -54,26 +54,20 @@ extends Node2D
 		constrain =  max(1, min(val, ropeLength - 0.1))
 		_point_count = int(ceil(ropeLength / constrain))
 		call_deferred("_ready")
-@export var gravityAdjustment: float = 0 :
-	set(val):
-		gravityAdjustment = val
-		_gravity = Vector2(0, prGravity + gravityAdjustment)
+@export var gravity := Vector2(0,20)
 @export_range(0.1, 0.9, .01) var dampening: float = 0.9
 @export var color: Color = Color(0.648, 0.389, 0.056)
 @export_range(1, 9999999, 1, "or_greater") var width: float = 2
 @export var attached: Node2D = null :
 	set(val):
 		attached = val
-		print(attached)
 		update_configuration_warnings()
 		assert(_is_attached_processed_first())
-@onready var prGravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")/50
 
 var _point_count: int
 var _pos: PackedVector2Array
 var _pos_prev: PackedVector2Array
 var _parent_cache: Node2D = null
-var _gravity: Vector2
 var _endpoint : Vector2 :
 	get:
 		return _pos[_point_count-1]
@@ -105,7 +99,6 @@ func _get_configuration_warnings():
 	return warnings
 
 func _ready()->void:
-	gravityAdjustment = gravityAdjustment # just so that the onready prGravity is added with setter
 	#_point_count = int(ceil(ropeLength / constrain))
 	
 	# resize arrays
@@ -165,7 +158,7 @@ func _update_points(delta)->void:
 	for i in range(1, _point_count):
 		var velocity = (_pos[i] -_pos_prev[i]) * dampening
 		_pos_prev[i] = _pos[i]
-		_pos[i] += velocity + (_gravity * delta)
+		_pos[i] += velocity + (gravity * delta)
 
 func _update_constrain()->void:
 	for i in range(_point_count-1):
