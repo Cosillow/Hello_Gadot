@@ -2,43 +2,10 @@
 class_name Rope
 extends Node2D
 
-# TODO: CURRENTLY... the _parent_cache must be of Node2d... otherwise it crashes
-#		idk what the behavior should be for that, probably just fall to gravity?
-#		also... I have zero error checking if there is no _parent_cache
-# TODO: boolean exports for the rope just affecting the _parent_cache/child velocity, not just setting position
 # TODO: ropeSize is not an exact science, because of the constraint size
 #		probably change the constraint size to work for the ropeSize on rope-set
-# TODO: _notification doesn't work all the time for reparenting... I've found it is because
-#		(in some way) the position of the rope is not always 0 when it swaps parents. Should I
-#		be using global position some places instead?
-# TODO: detatch from parent or detatch children? only if necessary for other objects
-
-# IDEA: because the children update first, they will be displaced from the actual _endpoint of the rope
-#		so, (only taking into account their x position probably {although, I'm considering the situation where the end 
-#		of the rope has swung up and yPos would give a better feeling of weight}) we could average or use a `childrens affect`
-#		ratio to determine where the new end point should be. My question is, when do I do this? I suspect it must
-#		be before the constraints (which means after we would still have to set the children back to the end result)
-#		possibly even we have to do this before the points are updated. I'm unsure
-# TODO: this is close ^^ with _update_new_endpoint(), but it doesn't take into account the fact that the player is still being
-#		affected by its physics update even after its position is set. defered set doesn't seem to work either (player is locked to _endpoint)
-
-# IDEA: I can keep the parent child structure because that is helpful for quickly setting up static scenes with ropes
-#		if I want a player to be attached, there needs to be an export variable for the player. I will keep the player in the top of all scenes,
-#		ensuring its _physics_process() runs before all ropes, allowing the affected _endpoint to be calculated based on the characters already calculated position
-# ** keep the game tree like this and all should be good? **
-#┖╴root
-   #┠╴Character (you are here!)
-   #┃  ┠╴Sword
-   #┃  ┖╴Backpack
-   #┃     ┖╴Dagger
-   #┠╴MyGame
-   #┖╴Swamp
-	  #┠╴Rope
-	  #┠╴Rope
-	  #┖╴Goblin
-# TODO: assert/node warning setup thing that only allows rope parent to be Node2d
-# TODO: remove previous parent cache error handling (now, I just assert parent is Node2d)
-
+#		...... I'm pretty sure changing the exports messes up while running too (callin eachother?)
+@export var offset: Vector2 = Vector2.ZERO
 @export var ropeLength:float = 30 :
 	set(val):
 		if val == ropeLength:
@@ -67,7 +34,6 @@ extends Node2D
 var _point_count: int
 var _pos: PackedVector2Array
 var _pos_prev: PackedVector2Array
-var _parent_cache: Node2D = null
 var _endpoint : Vector2 :
 	get:
 		return _pos[_point_count-1]
@@ -75,7 +41,7 @@ var _endpoint : Vector2 :
 		_pos[_point_count-1] = val
 var _translation: Vector2 :
 	get:
-		return _parent_cache.position if _parent_cache else Vector2.ZERO
+		return global_position + offset
 
 var endDirection: Vector2 :
 	get:
@@ -95,7 +61,7 @@ func _get_configuration_warnings():
 		
 	if !_is_attached_processed_first():
 		warnings.append("`attached` Node2d must be before rope in tree (such that it is processed first)")
-	# Returning an empty array means "no warning".
+	
 	return warnings
 
 func _ready()->void:
@@ -116,7 +82,7 @@ func _physics_process(delta)->void:
 	assert(_is_attached_processed_first())
 	
 	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
-	set_start(_parent_cache.position)
+	set_start(global_position)
 	_update_points(delta)
 	
 	# allow attached to affect rope before constraints
@@ -140,14 +106,14 @@ func _physics_process(delta)->void:
 func _notification(what):
 	match what:
 		NOTIFICATION_PARENTED:
-			_parent_cache = get_parent()
-			assert(_parent_cache is Node2D)
-		NOTIFICATION_UNPARENTED:
-			_parent_cache = null
+			assert(get_parent() is Node2D)
 
 func set_start(p:Vector2) -> void:
 	_pos[0] = p
 	_pos_prev[0] = p
+
+func set_endpoint_velocity(velocity: Vector2) -> void:
+	_pos_prev[-1] = _endpoint - (velocity*dampening)
 
 func _update_children() -> void:
 	for c in get_children():

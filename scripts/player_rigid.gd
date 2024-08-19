@@ -19,7 +19,9 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	var direction = Input.get_axis("move_left", "move_right")
 	if rope_swing:
 		if Input.is_action_just_pressed("jump"):
-			rope_swing.detach()
+			print(state.linear_velocity, " or.. ", state.get_velocity_at_local_position(global_position))
+			rope_swing.detach(state.linear_velocity/15)
+			
 			rope_swing = null
 			state.angular_velocity *= 5
 			state.linear_velocity.y *= 2

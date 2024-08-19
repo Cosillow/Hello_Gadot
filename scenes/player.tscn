@@ -93,9 +93,3 @@ initial_velocity_min = 36.59
 initial_velocity_max = 182.93
 scale_amount_max = 4.0
 color = Color(0.858824, 0.890196, 0.309804, 1)
-
-[node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(0, -87)
-zoom = Vector2(1.24, 1.24)
-position_smoothing_enabled = true
-position_smoothing_speed = 10.0
