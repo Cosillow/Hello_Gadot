@@ -27,12 +27,13 @@ position = Vector2(569, -238)
 position = Vector2(149, -41)
 
 [node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(0, 10)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
 shape = SubResource("WorldBoundaryShape2D_pf6o7")
 
 [node name="Line2D" type="Line2D" parent="Floor"]
-position = Vector2(-5, 38)
+position = Vector2(0, -17)
 points = PackedVector2Array(-1075, 0, 1087, 0)
 width = 1.0
 default_color = Color(0.577008, 0.577008, 0.577008, 1)

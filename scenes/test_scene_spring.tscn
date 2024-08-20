@@ -8,9 +8,7 @@
 
 [node name="RigidPlayer2" parent="." node_paths=PackedStringArray("rope_swing") instance=ExtResource("1_j1xu6")]
 position = Vector2(0, 180)
-angular_damp_mode = 1
-angular_damp = 0.9
-rope_rotation_speed = 1.0
+gravity_scale = 0.0
 rope_swing = NodePath("../RopeSwing")
 metadata/_edit_group_ = true
 
@@ -29,6 +27,7 @@ attached = NodePath("../../RigidPlayer2/CollisionShape2D")
 
 [node name="PinJoint2D" parent="RopeSwing" index="3"]
 node_b = NodePath("../../RigidPlayer2")
+bias = 0.821
 
 [node name="Platform" parent="." instance=ExtResource("4_7vnmx")]
 position = Vector2(394, -237)
