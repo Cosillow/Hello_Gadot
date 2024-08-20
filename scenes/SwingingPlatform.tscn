@@ -22,11 +22,9 @@ color = Color(0.747834, 0.456959, 0.992501, 1)
 
 [node name="Rope" type="Node2D" parent="TopPlatform"]
 script = ExtResource("2_rom6i")
-ropeLength = 300.0
-constrain = 30.0
 
 [node name="Platform" parent="TopPlatform/Rope" instance=ExtResource("2_hgxmw")]
-position = Vector2(0, 270)
+position = Vector2(0, 20.0036)
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="TopPlatform/Rope/Platform"]
 direction = Vector2(0, 1)

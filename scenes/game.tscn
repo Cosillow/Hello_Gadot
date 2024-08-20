@@ -18,8 +18,7 @@ position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
 [node name="Rope" parent="Player" instance=ExtResource("2_278xl")]
-ropeLength = 250.0
-constrain = 20.0
+segment_number = 21
 
 [node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
 position = Vector2(569, -238)

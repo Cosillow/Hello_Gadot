@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://b1iw8hn81mj0w"]
+[gd_scene load_steps=4 format=3 uid="uid://b1iw8hn81mj0w"]
 
 [ext_resource type="PackedScene" uid="uid://bjrwrl5n4ev21" path="res://scenes/rigid_player.tscn" id="1_j1xu6"]
 [ext_resource type="PackedScene" uid="uid://der36ibpkevao" path="res://scenes/rope_swing.tscn" id="2_3sr81"]
-[ext_resource type="Script" path="res://scripts/rope_swing.gd" id="3_fchea"]
 [ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/platform.tscn" id="4_7vnmx"]
 
 [node name="Node2D" type="Node2D"]
@@ -11,7 +10,7 @@
 position = Vector2(0, 180)
 angular_damp_mode = 1
 angular_damp = 0.9
-rope_rotation_speed = 5.0
+rope_rotation_speed = 1.0
 rope_swing = NodePath("../RopeSwing")
 metadata/_edit_group_ = true
 
@@ -19,12 +18,13 @@ metadata/_edit_group_ = true
 zoom = Vector2(1.5, 1.5)
 
 [node name="RopeSwing" parent="." node_paths=PackedStringArray("attachedBody", "ropeAnchorNode") instance=ExtResource("2_3sr81")]
-script = ExtResource("3_fchea")
 attachedBody = NodePath("../RigidPlayer2")
 ropeAnchorNode = NodePath("../RigidPlayer2/CollisionShape2D")
 metadata/_edit_group_ = true
 
 [node name="Rope" parent="RopeSwing" index="1" node_paths=PackedStringArray("attached")]
+rope_length = 168.0
+segment_number = 30
 attached = NodePath("../../RigidPlayer2/CollisionShape2D")
 
 [node name="PinJoint2D" parent="RopeSwing" index="3"]

@@ -14,10 +14,7 @@ script = ExtResource("1_5jw6y")
 shape = SubResource("RectangleShape2D_hbe1n")
 
 [node name="Rope" parent="." instance=ExtResource("1_7ht4t")]
-ropeLength = 175.0
 tightness = 40
-constrain = 6.0
-width = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_esqum")
