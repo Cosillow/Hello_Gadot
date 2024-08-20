@@ -1,10 +1,12 @@
-#@tool
+@tool
 class_name Rope
 extends Node2D
 
 # TODO: ropeSize is not an exact science, because of the constraint size
 #		probably change the constraint size to work for the ropeSize on rope-set
 #		...... I'm pretty sure changing the exports messes up while running too (callin eachother?)
+# TODO: rope detache velocity acts weird because the attached extends the rope beyond its length
+#		then the constraint back makes it act weird (I think)
 @export var offset: Vector2 = Vector2.ZERO
 @export var ropeLength:float = 30 :
 	set(val):

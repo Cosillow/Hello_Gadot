@@ -8,17 +8,21 @@
 [node name="Node2D" type="Node2D"]
 
 [node name="RigidPlayer2" parent="." node_paths=PackedStringArray("rope_swing") instance=ExtResource("1_j1xu6")]
-position = Vector2(401, 79)
+position = Vector2(0, 180)
 angular_damp_mode = 1
-angular_damp = 1.2
+angular_damp = 0.9
+rope_rotation_speed = 5.0
 rope_swing = NodePath("../RopeSwing")
+metadata/_edit_group_ = true
 
 [node name="Camera2D" type="Camera2D" parent="RigidPlayer2"]
+zoom = Vector2(1.5, 1.5)
 
 [node name="RopeSwing" parent="." node_paths=PackedStringArray("attachedBody", "ropeAnchorNode") instance=ExtResource("2_3sr81")]
 script = ExtResource("3_fchea")
 attachedBody = NodePath("../RigidPlayer2")
 ropeAnchorNode = NodePath("../RigidPlayer2/CollisionShape2D")
+metadata/_edit_group_ = true
 
 [node name="Rope" parent="RopeSwing" index="1" node_paths=PackedStringArray("attached")]
 attached = NodePath("../../RigidPlayer2/CollisionShape2D")
