@@ -66,7 +66,7 @@ func _get_configuration_warnings():
 	
 	return warnings
 
-func _ready()->void:
+func _ready() -> void:
 	_resize_arrays()
 	
 	# init position
@@ -100,6 +100,8 @@ func _physics_process(delta)->void:
 	
 	_fix_children_to_endpoint()
 	queue_redraw()
+	
+	_end_of_physics()
 
 func _notification(what):
 	match what:
@@ -119,9 +121,15 @@ func _resize_arrays() -> void:
 	_pos.resize(segment_number)
 	_pos_prev.resize(segment_number)
 
+func _end_of_physics()-> void:
+	return
+
+func _fixable_children(c: Node)-> bool:
+	return c is Node2D
+
 func _fix_children_to_endpoint() -> void:
 	for c in get_children():
-		if c is Node2D:
+		if _fixable_children(c):
 			c.position = _endpoint - _translation
 
 func _update_points(delta)->void:

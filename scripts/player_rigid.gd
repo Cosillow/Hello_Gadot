@@ -29,8 +29,12 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 			tween.tween_property(collision_shape, "rotation", 0, 1)
 		else:
 			state.apply_force(rope_strength*direction)
-	else:
-		state.apply_torque(air_control*direction)
+	#else:
+		#state.apply_torque(air_control*direction)
+
+	state.apply_force(Vector2(1000, 0)*direction)
+	if Input.is_action_just_pressed("jump"):
+		state.apply_impulse(Vector2(0, - 500))
 
 func grab_rope_swing(swing: RopeSwing) -> Node2D:
 	if rope_swing:

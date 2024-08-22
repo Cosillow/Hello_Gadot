@@ -8,7 +8,6 @@
 
 [node name="RigidPlayer2" parent="." node_paths=PackedStringArray("rope_swing") instance=ExtResource("1_j1xu6")]
 position = Vector2(0, 180)
-gravity_scale = 0.0
 rope_swing = NodePath("../RopeSwing")
 metadata/_edit_group_ = true
 
@@ -30,7 +29,7 @@ node_b = NodePath("../../RigidPlayer2")
 bias = 0.821
 
 [node name="Platform" parent="." instance=ExtResource("4_7vnmx")]
-position = Vector2(394, -237)
+position = Vector2(584, -236)
 
 [editable path="RigidPlayer2"]
 [editable path="RopeSwing"]

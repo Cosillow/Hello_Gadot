@@ -1,0 +1,68 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvoh54p3dv8h8"]
+
+[ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/platform.tscn" id="1_hv5x7"]
+[ext_resource type="Script" path="res://scripts/godot_rope.gd" id="1_l1j2i"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bhfsa"]
+radius = 7.0
+height = 54.0
+
+[node name="GodotRope" type="Node2D"]
+script = ExtResource("1_l1j2i")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(0, 186)
+
+[node name="Platform" parent="." instance=ExtResource("1_hv5x7")]
+
+[node name="Segment" type="RigidBody2D" parent="."]
+position = Vector2(0, 60)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Segment"]
+shape = SubResource("CapsuleShape2D_bhfsa")
+
+[node name="PinJoint2D" type="PinJoint2D" parent="Segment"]
+position = Vector2(0, -39)
+node_a = NodePath("../../Platform")
+node_b = NodePath("..")
+
+[node name="Segment2" type="RigidBody2D" parent="."]
+position = Vector2(0, 130)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Segment2"]
+shape = SubResource("CapsuleShape2D_bhfsa")
+
+[node name="PinJoint2D2" type="PinJoint2D" parent="Segment2"]
+position = Vector2(0, -34)
+node_a = NodePath("../../Segment")
+node_b = NodePath("..")
+
+[node name="Segment3" type="RigidBody2D" parent="."]
+position = Vector2(0, 202)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Segment3"]
+shape = SubResource("CapsuleShape2D_bhfsa")
+
+[node name="PinJoint2D3" type="PinJoint2D" parent="Segment3"]
+position = Vector2(0, -34)
+node_a = NodePath("../../Segment2")
+node_b = NodePath("..")
+
+[node name="Segment4" type="RigidBody2D" parent="."]
+position = Vector2(0, 272)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Segment4"]
+shape = SubResource("CapsuleShape2D_bhfsa")
+
+[node name="PinJoint2D4" type="PinJoint2D" parent="Segment4"]
+position = Vector2(0, -33)
+node_a = NodePath("../../Segment3")
+node_b = NodePath("..")
+
+[node name="PinJoint2D5" type="PinJoint2D" parent="Segment4"]
+position = Vector2(0, 25)
+node_a = NodePath("..")
+
+[node name="Line2D" type="Line2D" parent="."]
+default_color = Color(0.640121, 0.295521, 0.424618, 1)
+end_cap_mode = 2
