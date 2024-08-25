@@ -24,7 +24,7 @@ extends Node2D
 @export var offset: Vector2 = Vector2.ZERO
 @export var gravity := Vector2(0,20)
 @export var tightness: int = 100 ## constraint iterations (a ratio more iterations will be applied if rope exceeds length)
-@export_range(0.1, 0.9, .01) var dampening: float = 0.9
+@export_range(0.1, 1, .01) var dampening: float = .999
 @export var color: Color = Color(0.648, 0.389, 0.056)
 @export_range(1, 9999999, 1, "or_greater") var width: float = 2
 @export var attached: Node2D = null :
@@ -32,6 +32,8 @@ extends Node2D
 		attached = val
 		update_configuration_warnings()
 		assert(_is_attached_processed_first())
+
+@onready var line_2d: Line2D = %RopeLine2D
 
 var _pos: PackedVector2Array
 var _pos_prev: PackedVector2Array
@@ -76,44 +78,38 @@ func _ready() -> void:
 		_pos_prev[i] = global_position + Vector2(0, _segment_length *i)
 	_fix_children_to_endpoint()
 
-func _physics_process(delta)->void:
+func _process(delta: float) -> void:
 	assert(_is_attached_processed_first())
-	
+	_fix_children_to_endpoint()
+	queue_redraw()
+	line_2d.points = finalPosition
+
+func _physics_process(delta)->void:
+	# set start of rope
 	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
-	set_start(global_position)
+	_pos[0] = global_position
+	_pos_prev[0] = global_position
+	
 	_update_points(delta)
 	
 	# allow attached to affect rope before constraints
 	if attached:
 		_endpoint = attached.global_position
 	
-	# tighten rope more if it exceeds rope_length
-	var distSq = _pos[0].distance_squared_to(_endpoint)
-	var possibleError = distSq / pow(rope_length,2)
-	var iterations = max(tightness,int(possibleError * tightness))
-	for i in iterations:
-		_update_constrain()
+	for i in tightness:
+		_constrain()
 	
 	# visually reattach endpoint to node
 	if attached:
 		_endpoint = attached.global_position
-	
-	_fix_children_to_endpoint()
-	queue_redraw()
-	
-	_end_of_physics()
 
 func _notification(what):
 	match what:
 		NOTIFICATION_PARENTED:
 			assert(get_parent() is Node2D)
 
-func set_start(p:Vector2) -> void:
-	_pos[0] = p
-	_pos_prev[0] = p
-
-func set_endpoint_velocity(velocity: Vector2) -> void:
-	_pos_prev[-1] = _endpoint - (velocity*dampening)
+func apply_endpoint_impulse(velocity: Vector2) -> void:
+	_pos_prev[-1] = _endpoint - (velocity * dampening)
 
 func _resize_arrays() -> void:
 	## called by `segment_number` and `rope_length` setters and `_ready`
@@ -121,24 +117,30 @@ func _resize_arrays() -> void:
 	_pos.resize(segment_number)
 	_pos_prev.resize(segment_number)
 
-func _end_of_physics()-> void:
-	return
-
-func _fixable_children(c: Node)-> bool:
-	return c is Node2D
+func _is_child_affixed(c: Node)-> bool:
+	return c is Node2D and c != line_2d
 
 func _fix_children_to_endpoint() -> void:
 	for c in get_children():
-		if _fixable_children(c):
-			c.position = _endpoint - _translation
+		if _is_child_affixed(c):
+			c.global_position = _endpoint #- _translation
 
 func _update_points(delta)->void:
 	for i in range(1, len(_pos)):
 		var velocity = (_pos[i] -_pos_prev[i]) * dampening
 		_pos_prev[i] = _pos[i]
 		_pos[i] += velocity + (gravity * delta)
+		
+	#var influence_factor = 0.1
+	#var endpoint_influence = (_endpoint - _pos_prev[-1]) * dampening
+	#for i in range(len(_pos) - 2, -1, -1):
+		#if endpoint_influence.is_zero_approx():
+			#break
+		#_pos[i-1] += endpoint_influence * influence_factor
+		#endpoint_influence *= influence_factor
 
-func _update_constrain()->void:
+
+func _constrain()->void:
 	for i in range(len(_pos)-1):
 		var distance = _pos[i].distance_to(_pos[i+1])
 		var difference = _segment_length - distance
@@ -167,6 +169,9 @@ func _is_attached_processed_first()-> bool:
 
 func _draw() -> void:
 	var rope := finalPosition
-	draw_polyline(rope, color, float(width))
-	#for p in rope:
-		#draw_circle(p, width/1.5, "pink")
+	#for c in get_children():
+		#if _is_child_affixed(c):
+			#print(c.global_position - _endpoint)
+	#draw_polyline(rope, color, float(width))
+	for p in rope:
+		draw_circle(p, width/1.5, "pink")

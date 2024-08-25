@@ -24,7 +24,7 @@ color = Color(0.747834, 0.456959, 0.992501, 1)
 script = ExtResource("2_rom6i")
 
 [node name="Platform" parent="TopPlatform/Rope" instance=ExtResource("2_hgxmw")]
-position = Vector2(0, 20.0036)
+position = Vector2(2.41864e-42, 180.019)
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="TopPlatform/Rope/Platform"]
 direction = Vector2(0, 1)

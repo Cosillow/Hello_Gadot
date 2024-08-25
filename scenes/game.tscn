@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://b3lv604ivlupc"]
+[gd_scene load_steps=7 format=3 uid="uid://b3lv604ivlupc"]
 
 [ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/platform.tscn" id="1_8hn6c"]
-[ext_resource type="PackedScene" uid="uid://c3fersku5vjoc" path="res://scenes/breakable_rope.tscn" id="2_bts1v"]
+[ext_resource type="PackedScene" uid="uid://bw551ifmh3852" path="res://scenes/breakable_rope.tscn" id="2_bts1v"]
 [ext_resource type="PackedScene" uid="uid://dfs27r521w8gb" path="res://scenes/player.tscn" id="2_r6xbm"]
 [ext_resource type="PackedScene" uid="uid://1xojv1oq0tpf" path="res://scenes/SwingingPlatform.tscn" id="4_8el7i"]
+[ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="5_2rljj"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pf6o7"]
 distance = -27.0
@@ -11,16 +12,17 @@ distance = -27.0
 [node name="Game" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("2_r6xbm")]
-position = Vector2(571, -278)
+position = Vector2(562, -372)
 collision_layer = 2
-
-[node name="Rope" parent="Player" instance=ExtResource("2_bts1v")]
-segment_number = 2
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 offset = Vector2(0, -87)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
+
+[node name="BreakableRope" parent="Player" instance=ExtResource("2_bts1v")]
+gravity = Vector2(0, 0)
+dampening = 0.97
 
 [node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
 position = Vector2(569, -238)
@@ -54,3 +56,20 @@ time = 4.0
 position = Vector2(-303, -227)
 distance = 100.0
 time = 4.0
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+z_index = -1
+repeat_size = Vector2(1000, 0)
+repeat_times = 3
+
+[node name="Sprite2D3" type="Sprite2D" parent="Parallax2D"]
+self_modulate = Color(0.572549, 0, 1, 0.427451)
+position = Vector2(811, -269)
+scale = Vector2(0.953125, 17.0703)
+texture = ExtResource("5_2rljj")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Parallax2D"]
+self_modulate = Color(0.160784, 1, 1, 0.376471)
+position = Vector2(348.5, -269)
+scale = Vector2(0.304688, 17.0703)
+texture = ExtResource("5_2rljj")
