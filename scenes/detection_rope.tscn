@@ -5,8 +5,10 @@
 
 [node name="InheritRope" instance=ExtResource("1_urdm8")]
 script = ExtResource("2_hacxc")
-mask = 1
+mask = 0
+damping = 0.9
 
 [node name="Area2DLine" type="Area2D" parent="." index="1"]
 unique_name_in_owner = true
 collision_layer = 0
+collision_mask = 0

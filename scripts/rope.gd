@@ -24,7 +24,8 @@ extends Node2D
 @export var offset: Vector2 = Vector2.ZERO
 @export var gravity := Vector2(0,20)
 @export var tightness: int = 100 ## constraint iterations (a ratio more iterations will be applied if rope exceeds length)
-@export_range(0.1, 1, .01) var dampening: float = .999
+@export_range(0.1, 1, .0001) var damping: float = .9
+@export_range(0.1, .9999, .0001) var end_stiffness: float = .5
 @export var color: Color = Color(0.648, 0.389, 0.056)
 @export_range(1, 9999999, 1, "or_greater") var width: float = 2
 @export var attached: Node2D = null :
@@ -109,7 +110,8 @@ func _notification(what):
 			assert(get_parent() is Node2D)
 
 func apply_endpoint_impulse(velocity: Vector2) -> void:
-	_pos_prev[-1] = _endpoint - (velocity * dampening)
+	#_pos_prev[-1] = _endpoint - (velocity * damping)
+	_pos_prev[-1] = _pos_prev[-1] - (velocity * damping)
 
 func _resize_arrays() -> void:
 	## called by `segment_number` and `rope_length` setters and `_ready`
@@ -127,37 +129,38 @@ func _fix_children_to_endpoint() -> void:
 
 func _update_points(delta)->void:
 	for i in range(1, len(_pos)):
-		var velocity = (_pos[i] -_pos_prev[i]) * dampening
+		var velocity = (_pos[i] - _pos_prev[i]) * damping
 		_pos_prev[i] = _pos[i]
 		_pos[i] += velocity + (gravity * delta)
 		
 	#var influence_factor = 0.1
-	#var endpoint_influence = (_endpoint - _pos_prev[-1]) * dampening
+	#var endpoint_influence = (_endpoint - _pos_prev[-1]) * damping
 	#for i in range(len(_pos) - 2, -1, -1):
 		#if endpoint_influence.is_zero_approx():
 			#break
 		#_pos[i-1] += endpoint_influence * influence_factor
 		#endpoint_influence *= influence_factor
 
-
 func _constrain()->void:
 	for i in range(len(_pos)-1):
-		var distance = _pos[i].distance_to(_pos[i+1])
-		var difference = _segment_length - distance
-		var percent = difference / distance
+		var cur_dist = _pos[i].distance_to(_pos[i+1])
+		var error = _segment_length - cur_dist
+		if error >= 0:
+			continue
+		var percent = error / cur_dist
 		var vec2 = _pos[i+1] - _pos[i]
 		
-		# if first point
 		if i == 0:
-			#if _parent_cache:
+			# don't adjust first point (keep on parent)
 			_pos[i+1] += vec2 * percent
-			#else:
-				#_pos[i] -= vec2 * (percent/2)
-				#_pos[i+1] += vec2 * (percent/2)
+		elif i+1 == segment_number-1:
+			# last constraint (connected to endpoint)
+			if attached:
+				_pos[i] -= vec2 * percent
+			else:
+				_pos[i] -= vec2 * (percent * end_stiffness)
+				_pos[i+1] += vec2 * (percent * (1 - end_stiffness))
 		else:
-			#if i+1 == segment_number-1 && endPin:
-				#_pos[i] -= vec2 * percent
-			#else:
 			_pos[i] -= vec2 * (percent/2)
 			_pos[i+1] += vec2 * (percent/2)
 
@@ -169,9 +172,5 @@ func _is_attached_processed_first()-> bool:
 
 func _draw() -> void:
 	var rope := finalPosition
-	#for c in get_children():
-		#if _is_child_affixed(c):
-			#print(c.global_position - _endpoint)
-	#draw_polyline(rope, color, float(width))
 	for p in rope:
 		draw_circle(p, width/1.5, "pink")

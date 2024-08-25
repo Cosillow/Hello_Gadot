@@ -4,7 +4,7 @@
 
 [node name="Rope" type="Node2D"]
 script = ExtResource("1_wuqvt")
-dampening = 1.0
+damping = null
 
 [node name="RopeLine2D" type="Line2D" parent="."]
 unique_name_in_owner = true
