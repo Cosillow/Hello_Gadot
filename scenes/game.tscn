@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://b3lv604ivlupc"]
+[gd_scene load_steps=7 format=3 uid="uid://b3lv604ivlupc"]
 
 [ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/platform.tscn" id="1_8hn6c"]
+[ext_resource type="PackedScene" uid="uid://b8lormv86bklw" path="res://ropes/area_rope.tscn" id="2_ondul"]
 [ext_resource type="PackedScene" uid="uid://dfs27r521w8gb" path="res://scenes/player.tscn" id="2_r6xbm"]
 [ext_resource type="PackedScene" uid="uid://1xojv1oq0tpf" path="res://scenes/SwingingPlatform.tscn" id="4_8el7i"]
 [ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="5_2rljj"]
@@ -18,6 +19,8 @@ collision_layer = 2
 offset = Vector2(0, -87)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
+
+[node name="AreaRope" parent="Player" instance=ExtResource("2_ondul")]
 
 [node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
 position = Vector2(569, -238)

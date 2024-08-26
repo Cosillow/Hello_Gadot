@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/SwingingPlatform.gd" id="1_0nnvo"]
 [ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/platform.tscn" id="2_hgxmw"]
-[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://scenes/rope.tscn" id="3_ig54k"]
+[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="3_ig54k"]
 
 [node name="SwingingPlatform" type="Node2D"]
 script = ExtResource("1_0nnvo")

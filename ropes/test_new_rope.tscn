@@ -1,19 +1,19 @@
 [gd_scene load_steps=4 format=3 uid="uid://bgdw5qm3xy28d"]
 
-[ext_resource type="PackedScene" uid="uid://cvoh54p3dv8h8" path="res://scenes/godot_rope.tscn" id="1_6dvhf"]
-[ext_resource type="PackedScene" uid="uid://bjrwrl5n4ev21" path="res://scenes/rigid_player.tscn" id="2_elyaa"]
+[ext_resource type="PackedScene" uid="uid://cvoh54p3dv8h8" path="res://ropes/godot_rope.tscn" id="1_p1bey"]
+[ext_resource type="PackedScene" uid="uid://bjrwrl5n4ev21" path="res://scenes/rigid_player.tscn" id="2_s1tud"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_7q1kl"]
 distance = -27.0
 
 [node name="Node2D" type="Node2D"]
 
-[node name="GodotRope" parent="." instance=ExtResource("1_6dvhf")]
+[node name="GodotRope" parent="." instance=ExtResource("1_p1bey")]
 
 [node name="PinJoint2D5" parent="GodotRope/Segment4" index="2"]
 node_b = NodePath("../../../RigidPlayer2")
 
-[node name="RigidPlayer2" parent="." instance=ExtResource("2_elyaa")]
+[node name="RigidPlayer2" parent="." instance=ExtResource("2_s1tud")]
 position = Vector2(0, 299)
 mass = 2.54
 metadata/_edit_group_ = true

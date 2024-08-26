@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://der36ibpkevao"]
 
-[ext_resource type="Script" path="res://scripts/rope_swing.gd" id="1_5jw6y"]
-[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://scenes/rope.tscn" id="1_7ht4t"]
+[ext_resource type="Script" path="res://ropes/rope_swing.gd" id="1_5jw6y"]
+[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="1_7ht4t"]
 [ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="2_esqum"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hbe1n"]

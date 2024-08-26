@@ -1,9 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://c2gg3xyo07yng"]
+[gd_scene load_steps=9 format=3 uid="uid://wwxuv0ca73ev"]
 
-[ext_resource type="Script" path="res://scripts/space_controller.gd" id="1_v2n54"]
-[ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="2_42h7o"]
-[ext_resource type="PackedScene" uid="uid://b8lormv86bklw" path="res://ropes/area_rope.tscn" id="3_vjh8a"]
-[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="4_lv1lt"]
+[ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="1_ky3cx"]
+[ext_resource type="Script" path="res://scripts/space_controller.gd" id="2_tuc74"]
+[ext_resource type="PackedScene" uid="uid://bqpjpn3whh8xl" path="res://ropes/animatable_rope.tscn" id="3_qdhoj"]
+[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="4_vypor"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
 friction = 0.0
@@ -29,22 +29,22 @@ repeat_times = 3
 self_modulate = Color(0.572549, 0, 1, 0.427451)
 position = Vector2(811, -269)
 scale = Vector2(0.953125, 17.0703)
-texture = ExtResource("2_42h7o")
+texture = ExtResource("1_ky3cx")
 
 [node name="Sprite2D4" type="Sprite2D" parent="Parallax2D"]
 self_modulate = Color(0.160784, 1, 1, 0.376471)
 position = Vector2(348.5, -269)
 scale = Vector2(0.304688, 17.0703)
-texture = ExtResource("2_42h7o")
+texture = ExtResource("1_ky3cx")
 
 [node name="ControlledBody" type="RigidBody2D" parent="."]
-position = Vector2(-357, -61)
+position = Vector2(-321, 35)
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
 contact_monitor = true
 max_contacts_reported = 5
-script = ExtResource("1_v2n54")
+script = ExtResource("2_tuc74")
 bounce_ratio = 0.005
 metadata/_edit_group_ = true
 
@@ -56,18 +56,23 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody"]
 shape = SubResource("CircleShape2D_pocej")
 
-[node name="RopeSling" parent="ControlledBody" instance=ExtResource("3_vjh8a")]
+[node name="Camera2D" type="Camera2D" parent="ControlledBody"]
+position = Vector2(17.2217, 105.044)
+zoom = Vector2(0.75, 0.75)
+position_smoothing_enabled = true
+
+[node name="RopeSling" parent="ControlledBody" instance=ExtResource("3_qdhoj")]
 unique_name_in_owner = true
-rope_length = 400.0
+layer = 2
+rope_length = 610.0
 segment_number = 30
 gravity = Vector2(0, 0)
-tightness = 30
 damping = 0.99
 end_stiffness = 0.98
 
 [node name="AttachedAnimBody" type="AnimatableBody2D" parent="ControlledBody/RopeSling"]
 unique_name_in_owner = true
-position = Vector2(0, 386.667)
+position = Vector2(-76.1056, 200.061)
 collision_mask = 0
 physics_material_override = SubResource("PhysicsMaterial_x8h5h")
 sync_to_physics = false
@@ -79,7 +84,7 @@ shape = SubResource("CircleShape2D_ndur0")
 color = Color(0.3053, 0.71, 0.46718, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 
-[node name="DecalRope" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
+[node name="DecalRope" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_vypor")]
 rope_length = 100.0
 offset = Vector2(40, 0)
 gravity = Vector2(0, 0)
@@ -89,7 +94,7 @@ color = Color(1, 1, 1, 1)
 width = 5.0
 attached = NodePath("..")
 
-[node name="DecalRope4" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
+[node name="DecalRope4" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_vypor")]
 rope_length = 100.0
 offset = Vector2(0, 40)
 gravity = Vector2(0, 0)
@@ -99,7 +104,7 @@ color = Color(0.414304, 0, 0.204317, 1)
 width = 5.0
 attached = NodePath("..")
 
-[node name="DecalRope2" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
+[node name="DecalRope2" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_vypor")]
 rope_length = 100.0
 offset = Vector2(-40, 0)
 gravity = Vector2(0, 0)
@@ -109,7 +114,7 @@ color = Color(0, 0, 0, 1)
 width = 5.0
 attached = NodePath("..")
 
-[node name="DecalRope3" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
+[node name="DecalRope3" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_vypor")]
 rope_length = 100.0
 offset = Vector2(0, -40)
 gravity = Vector2(0, 0)
@@ -119,14 +124,10 @@ color = Color(0.246334, 0.000622812, 0.582798, 1)
 width = 5.0
 attached = NodePath("..")
 
-[node name="Camera2D" type="Camera2D" parent="ControlledBody"]
-position = Vector2(17.2217, 105.044)
-zoom = Vector2(0.75, 0.75)
-position_smoothing_enabled = true
-
 [node name="ControlledBody12" type="RigidBody2D" parent="."]
 position = Vector2(152, 4)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -143,6 +144,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="ControlledBody13" type="RigidBody2D" parent="."]
 position = Vector2(257, 21)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -159,6 +161,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="ControlledBody14" type="RigidBody2D" parent="."]
 position = Vector2(265, -178)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -175,6 +178,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="ControlledBody15" type="RigidBody2D" parent="."]
 position = Vector2(131, -56)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -191,6 +195,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="ControlledBody16" type="RigidBody2D" parent="."]
 position = Vector2(330, -30)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -207,6 +212,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="ControlledBody17" type="RigidBody2D" parent="."]
 position = Vector2(184, 55)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -223,6 +229,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="ControlledBody18" type="RigidBody2D" parent="."]
 position = Vector2(320, 48)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -239,6 +246,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="ControlledBody19" type="RigidBody2D" parent="."]
 position = Vector2(343, -117)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -255,6 +263,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="ControlledBody20" type="RigidBody2D" parent="."]
 position = Vector2(189, -140)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -271,6 +280,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 [node name="ControlledBody11" type="RigidBody2D" parent="."]
 position = Vector2(250, -67)
 collision_layer = 0
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
