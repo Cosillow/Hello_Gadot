@@ -17,22 +17,22 @@ func catmull_rom_spline(a_points: Array, resolution: int = 10, extrapolate_end_p
 	if extrapolate_end_points:
 		points.insert(0, points[0] - (points[1] - points[0]))
 		points.append(points[-1] + (points[-1] - points[-2]))
-
+		
 	var smooth_points := PackedVector2Array()
 	if points.size() < 4:
 		return points
-
+		
 	for i in range(1, points.size() - 2):
 		var p0 = points[i - 1]
 		var p1 = points[i]
 		var p2 = points[i + 1]
 		var p3 = points[i + 2]
-
+		
 		for t in range(0, resolution):
 			var tt = t / float(resolution)
 			var tt2 = tt * tt
 			var tt3 = tt2 * tt
-
+			
 			var q = (
 				0.5
 				* (
@@ -42,6 +42,6 @@ func catmull_rom_spline(a_points: Array, resolution: int = 10, extrapolate_end_p
 					+ (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * tt3
 					)
 				)
-
+			
 			smooth_points.append(q)
 	return smooth_points

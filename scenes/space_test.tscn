@@ -6,7 +6,7 @@
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
 friction = 0.0
-bounce = 0.21
+bounce = 0.06
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
 radius = 16.0312
@@ -37,14 +37,14 @@ scale = Vector2(0.304688, 17.0703)
 texture = ExtResource("2_42h7o")
 
 [node name="ControlledBody" type="RigidBody2D" parent="."]
-position = Vector2(58, -115)
+position = Vector2(-364, 52)
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
 contact_monitor = true
 max_contacts_reported = 5
 script = ExtResource("1_v2n54")
-bounce_ratio = 0.015
+bounce_ratio = 0.005
 metadata/_edit_group_ = true
 
 [node name="Polygon2D2" type="Polygon2D" parent="ControlledBody"]
@@ -66,7 +66,7 @@ end_stiffness = 0.98
 
 [node name="AttachedAnimBody" type="AnimatableBody2D" parent="ControlledBody/RopeSling"]
 unique_name_in_owner = true
-position = Vector2(0, 116)
+position = Vector2(63.3293, -88.2852)
 collision_mask = 0
 physics_material_override = SubResource("PhysicsMaterial_x8h5h")
 sync_to_physics = false
