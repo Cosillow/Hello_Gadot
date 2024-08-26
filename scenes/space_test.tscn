@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://c2gg3xyo07yng"]
+[gd_scene load_steps=9 format=3 uid="uid://c2gg3xyo07yng"]
 
 [ext_resource type="Script" path="res://scripts/space_controller.gd" id="1_v2n54"]
 [ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="2_42h7o"]
 [ext_resource type="PackedScene" uid="uid://b8lormv86bklw" path="res://scenes/detection_rope.tscn" id="3_vjh8a"]
+[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://scenes/rope.tscn" id="4_lv1lt"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
 friction = 0.0
@@ -37,7 +38,7 @@ scale = Vector2(0.304688, 17.0703)
 texture = ExtResource("2_42h7o")
 
 [node name="ControlledBody" type="RigidBody2D" parent="."]
-position = Vector2(-364, 52)
+position = Vector2(-357, -61)
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -66,7 +67,7 @@ end_stiffness = 0.98
 
 [node name="AttachedAnimBody" type="AnimatableBody2D" parent="ControlledBody/RopeSling"]
 unique_name_in_owner = true
-position = Vector2(63.3293, -88.2852)
+position = Vector2(0, 386.667)
 collision_mask = 0
 physics_material_override = SubResource("PhysicsMaterial_x8h5h")
 sync_to_physics = false
@@ -77,6 +78,46 @@ shape = SubResource("CircleShape2D_ndur0")
 [node name="Polygon2D" type="Polygon2D" parent="ControlledBody/RopeSling/AttachedAnimBody"]
 color = Color(0.3053, 0.71, 0.46718, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
+
+[node name="DecalRope" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
+rope_length = 100.0
+offset = Vector2(40, 0)
+gravity = Vector2(0, 0)
+tightness = 3
+damping = 0.98
+color = Color(1, 1, 1, 1)
+width = 5.0
+attached = NodePath("..")
+
+[node name="DecalRope4" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
+rope_length = 100.0
+offset = Vector2(0, 40)
+gravity = Vector2(0, 0)
+tightness = 3
+damping = 0.98
+color = Color(0.414304, 0, 0.204317, 1)
+width = 5.0
+attached = NodePath("..")
+
+[node name="DecalRope2" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
+rope_length = 100.0
+offset = Vector2(-40, 0)
+gravity = Vector2(0, 0)
+tightness = 3
+damping = 1.0
+color = Color(0, 0, 0, 1)
+width = 5.0
+attached = NodePath("..")
+
+[node name="DecalRope3" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
+rope_length = 100.0
+offset = Vector2(0, -40)
+gravity = Vector2(0, 0)
+tightness = 3
+damping = 1.0
+color = Color(0.246334, 0.000622812, 0.582798, 1)
+width = 5.0
+attached = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="ControlledBody"]
 position = Vector2(17.2217, 105.044)

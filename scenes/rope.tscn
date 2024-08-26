@@ -4,13 +4,9 @@
 
 [node name="Rope" type="Node2D"]
 script = ExtResource("1_wuqvt")
-damping = null
 
 [node name="RopeLine2D" type="Line2D" parent="."]
 unique_name_in_owner = true
 points = PackedVector2Array(0, 0, 0, 20.0036, 0, 40.0071, 0, 60.0102, 0, 80.0129, 0, 100.015, 0, 120.017, 0, 140.018, 0, 160.019, 0, 180.019)
-width = 2.0
-default_color = Color(0.560453, 0.495228, 0.262556, 1)
-joint_mode = 1
 begin_cap_mode = 2
 end_cap_mode = 2

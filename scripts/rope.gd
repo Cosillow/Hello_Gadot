@@ -71,6 +71,8 @@ func _get_configuration_warnings():
 	return warnings
 
 func _ready() -> void:
+	line_2d.default_color = color
+	line_2d.width = width
 	_resize_arrays()
 	
 	# init position
@@ -96,14 +98,14 @@ func _physics_process(delta)->void:
 	
 	# allow attached to affect rope before constraints
 	if attached:
-		_endpoint = attached.global_position
+		_endpoint = attached.global_position + offset
 	
 	for i in tightness:
 		_constrain()
 	
 	# visually reattach endpoint to node
 	if attached:
-		_endpoint = attached.global_position
+		_endpoint = attached.global_position + offset
 
 func _notification(what):
 	match what:

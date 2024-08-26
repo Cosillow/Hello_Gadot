@@ -1,5 +1,10 @@
 class_name SpaceController
 
+# TODO: add rope impulse when attached hits something
+# TODO: add controller force (probably not impulse) when attached fully extends 
+# 		THIS WILL alreday be finnickey... need to write a solution that works for different end stiffness'
+#		and... other things I can't think of rn...
+
 extends RigidBody2D
 
 @export var thrust := Vector2(500, 500)
