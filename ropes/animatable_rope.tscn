@@ -4,12 +4,12 @@
 [ext_resource type="Script" path="res://anim_rope.gd" id="2_rmyuj"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_phf7o"]
-bounce = 0.14
-absorbent = true
+bounce = 1.0
 
 [node name="AnimatableRope" instance=ExtResource("1_0uqyf")]
 script = ExtResource("2_rmyuj")
 layer = 1
+mask = 1
 
 [node name="RopeLine2D" parent="." index="0"]
 points = PackedVector2Array(0, 0, 0, 20.0036, 0, 40.0071, 0, 60.0102, 0, 80.0129, 0, 100.015, 0, 120.017, 0, 140.018, 0, 160.019, 0, 180.019)

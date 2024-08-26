@@ -63,7 +63,8 @@ position_smoothing_enabled = true
 
 [node name="RopeSling" parent="ControlledBody" instance=ExtResource("3_qdhoj")]
 unique_name_in_owner = true
-layer = 2
+layer = 0
+mask = 4
 rope_length = 610.0
 segment_number = 30
 gravity = Vector2(0, 0)
@@ -72,7 +73,7 @@ end_stiffness = 0.98
 
 [node name="AttachedAnimBody" type="AnimatableBody2D" parent="ControlledBody/RopeSling"]
 unique_name_in_owner = true
-position = Vector2(-76.1056, 200.061)
+position = Vector2(0, 589.667)
 collision_mask = 0
 physics_material_override = SubResource("PhysicsMaterial_x8h5h")
 sync_to_physics = false
@@ -126,7 +127,7 @@ attached = NodePath("..")
 
 [node name="ControlledBody12" type="RigidBody2D" parent="."]
 position = Vector2(152, 4)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -143,7 +144,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody13" type="RigidBody2D" parent="."]
 position = Vector2(257, 21)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -160,7 +161,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody14" type="RigidBody2D" parent="."]
 position = Vector2(265, -178)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -177,7 +178,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody15" type="RigidBody2D" parent="."]
 position = Vector2(131, -56)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -194,7 +195,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody16" type="RigidBody2D" parent="."]
 position = Vector2(330, -30)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -211,7 +212,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody17" type="RigidBody2D" parent="."]
 position = Vector2(184, 55)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -228,7 +229,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody18" type="RigidBody2D" parent="."]
 position = Vector2(320, 48)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -245,7 +246,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody19" type="RigidBody2D" parent="."]
 position = Vector2(343, -117)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -262,7 +263,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody20" type="RigidBody2D" parent="."]
 position = Vector2(189, -140)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -279,7 +280,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody11" type="RigidBody2D" parent="."]
 position = Vector2(250, -67)
-collision_layer = 0
+collision_layer = 4
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0

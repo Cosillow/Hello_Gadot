@@ -82,7 +82,7 @@ func _ready() -> void:
 		_pos_prev[i] = global_position + Vector2(0, _segment_length *i)
 	_fix_children_to_endpoint()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	assert(_is_attached_processed_first())
 	_fix_children_to_endpoint()
 	queue_redraw()
@@ -115,6 +115,9 @@ func _notification(what):
 func apply_endpoint_impulse(velocity: Vector2) -> void:
 	#_pos_prev[-1] = _endpoint - (velocity * damping)
 	_pos_prev[-1] = _pos_prev[-1] - (velocity * damping)
+
+func _apply_impulse(velocity: Vector2, point: int) -> void:
+	_pos_prev[point] = _pos_prev[point] - (velocity * damping)
 
 func _resize_arrays() -> void:
 	## called by `segment_number` and `rope_length` setters and `_ready`
