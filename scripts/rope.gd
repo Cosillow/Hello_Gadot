@@ -8,6 +8,7 @@ extends Node2D
 # TODO: rope detache velocity acts weird because the attached extends the rope beyond its length
 #		then the constraint back makes it act weird (I think)
 # TODO: fix `segment_number` runtime adjustment unexpected physics (not too pressing unless I want to use that)
+
 @export_range(1, 9999999, 1, "or_greater") var rope_length:float = 200 :
 	set(val):
 		if val == rope_length or val < 1: return
@@ -171,6 +172,7 @@ func _is_attached_processed_first()-> bool:
 	return is_greater_than(attached)
 
 func _draw() -> void:
-	var rope := finalPosition
-	for p in rope:
-		draw_circle(p, width/1.5, "pink")
+	pass
+	#var rope := finalPosition
+	#for p in rope:
+		#draw_circle(p, width/1.5, "pink")
