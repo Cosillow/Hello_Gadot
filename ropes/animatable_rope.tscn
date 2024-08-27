@@ -1,13 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bqpjpn3whh8xl"]
+[gd_scene load_steps=3 format=3 uid="uid://bqpjpn3whh8xl"]
 
 [ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="1_0uqyf"]
 [ext_resource type="Script" path="res://anim_rope.gd" id="2_rmyuj"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_phf7o"]
-bounce = 1.0
-
 [node name="AnimatableRope" instance=ExtResource("1_0uqyf")]
 script = ExtResource("2_rmyuj")
+physics_material_override = null
 layer = 1
 mask = 1
 
@@ -17,5 +15,4 @@ points = PackedVector2Array(0, 0, 0, 20.0036, 0, 40.0071, 0, 60.0102, 0, 80.0129
 [node name="AnimatableSegments" type="AnimatableBody2D" parent="." index="1"]
 unique_name_in_owner = true
 collision_mask = 0
-physics_material_override = SubResource("PhysicsMaterial_phf7o")
 sync_to_physics = false
