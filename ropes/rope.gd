@@ -35,7 +35,7 @@ extends Node2D
 		update_configuration_warnings()
 		assert(_is_attached_processed_first())
 
-@onready var line_2d: Line2D = %RopeLine2D
+@onready var _line_2d := Line2D.new()
 
 var _pos: PackedVector2Array
 var _pos_prev: PackedVector2Array
@@ -71,8 +71,9 @@ func _get_configuration_warnings():
 	return warnings
 
 func _ready() -> void:
-	line_2d.default_color = color
-	line_2d.width = width
+	_line_2d.default_color = color
+	_line_2d.width = width
+	add_child(_line_2d, false, InternalMode.INTERNAL_MODE_FRONT)
 	_resize_arrays()
 	
 	# init position
@@ -86,7 +87,7 @@ func _process(_delta: float) -> void:
 	assert(_is_attached_processed_first())
 	_fix_children_to_endpoint()
 	queue_redraw()
-	line_2d.points = finalPosition
+	_line_2d.points = finalPosition
 
 func _physics_process(delta)->void:
 	# set start of rope
@@ -125,12 +126,9 @@ func _resize_arrays() -> void:
 	_pos.resize(segment_number)
 	_pos_prev.resize(segment_number)
 
-func _is_child_affixed(c: Node)-> bool:
-	return c is Node2D and c != line_2d
-
 func _fix_children_to_endpoint() -> void:
-	for c in get_children():
-		if _is_child_affixed(c):
+	for c in get_children(false):
+		if c is Node2D:
 			c.global_position = _endpoint #- _translation
 
 func _update_points(delta)->void:

@@ -18,13 +18,15 @@ extends CollisionShapeRope
 		if not animatable_body: return
 		animatable_body.collision_mask = mask
 
-@onready var animatable_body: AnimatableBody2D = %AnimatableSegments
+@onready var animatable_body := AnimatableBody2D.new()
 
 func _ready() -> void:
 	super()
 	animatable_body.collision_layer = layer
 	animatable_body.collision_mask = mask
 	animatable_body.physics_material_override = physics_material_override
+	animatable_body.sync_to_physics = false
+	add_child(animatable_body, false, InternalMode.INTERNAL_MODE_FRONT)
 
 func _physics_process(delta: float) -> void:
 	super(delta)
@@ -82,7 +84,3 @@ func _handle_collisions() -> void:
 			_apply_impulse(force_direction * impulse_magnitude * ratio , point_i)
 			_apply_impulse(force_direction * impulse_magnitude * (1 - ratio) , point_i + 1)
 			#apply_force_to_rope(force_direction)
-
-func _is_child_affixed(c: Node)-> bool:
-	# prevent area segments from being oriented at end of rope
-	return super(c) and c != animatable_body

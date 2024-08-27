@@ -1,14 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqpjpn3whh8xl"]
+[gd_scene load_steps=2 format=3 uid="uid://bqpjpn3whh8xl"]
 
-[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="1_0uqyf"]
 [ext_resource type="Script" path="res://anim_rope.gd" id="2_rmyuj"]
 
-[node name="AnimatableRope" instance=ExtResource("1_0uqyf")]
+[node name="AnimatableRope" type="Node2D"]
 script = ExtResource("2_rmyuj")
-physics_material_override = null
-layer = 1
-mask = 1
-
-[node name="AnimatableSegments" type="AnimatableBody2D" parent="." index="1"]
-unique_name_in_owner = true
-sync_to_physics = false
