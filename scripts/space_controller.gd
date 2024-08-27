@@ -7,16 +7,21 @@ class_name SpaceController
 
 extends RigidBody2D
 
-@export var thrust := Vector2(500, 500)
+@export var thrust: float = 1000 :
+	set(val):
+		thrust = val
+		_thrust_vector = Vector2(val, val)
 @export var bounce_ratio: float = 0.1
 
 @onready var rope_sling: Rope = %RopeSling
 @onready var attached_body: AnimatableBody2D = %AttachedAnimBody
 
+var _thrust_vector := Vector2.ZERO
+
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	var X_DIR = Input.get_axis("move_left", "move_right")
 	var Y_DIR = Input.get_axis("move_up", "move_down")
-	state.apply_central_force(thrust * Vector2(X_DIR, Y_DIR).normalized())
+	state.apply_central_force(_thrust_vector * Vector2(X_DIR, Y_DIR).normalized())
 	
 	for i in state.get_contact_count():
 		if state.get_contact_collider_object(i) == attached_body:
