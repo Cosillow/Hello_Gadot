@@ -86,7 +86,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	assert(_is_attached_processed_first())
 	_fix_children_to_endpoint()
-	queue_redraw()
+	#queue_redraw()
 	_line_2d.points = finalPosition
 
 func _physics_process(delta)->void:
@@ -95,7 +95,7 @@ func _physics_process(delta)->void:
 	_pos[0] = global_position
 	_pos_prev[0] = global_position
 	
-	_update_points(delta)
+	_verlet_integrate_points(delta)
 	
 	# allow attached to affect rope before constraints
 	if attached:
@@ -131,19 +131,11 @@ func _fix_children_to_endpoint() -> void:
 		if c is Node2D:
 			c.global_position = _endpoint #- _translation
 
-func _update_points(delta)->void:
+func _verlet_integrate_points(delta)->void:
 	for i in range(1, len(_pos)):
 		var velocity = (_pos[i] - _pos_prev[i]) * damping
 		_pos_prev[i] = _pos[i]
 		_pos[i] += velocity + (gravity * delta)
-		
-	#var influence_factor = 0.1
-	#var endpoint_influence = (_endpoint - _pos_prev[-1]) * damping
-	#for i in range(len(_pos) - 2, -1, -1):
-		#if endpoint_influence.is_zero_approx():
-			#break
-		#_pos[i-1] += endpoint_influence * influence_factor
-		#endpoint_influence *= influence_factor
 
 func _constrain()->void:
 	for i in range(len(_pos)-1):
@@ -174,8 +166,7 @@ func _is_attached_processed_first()-> bool:
 	if not is_inside_tree(): return true
 	return is_greater_than(attached)
 
-func _draw() -> void:
-	pass
+#func _draw() -> void:
 	#var rope := finalPosition
 	#for p in rope:
 		#draw_circle(p, width/1.5, "pink")

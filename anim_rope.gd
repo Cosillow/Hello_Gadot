@@ -31,12 +31,13 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	super(delta)
 	_move_segments(animatable_body)
-	_handle_collisions()
+	_handle_collisions(delta)
 
-func _handle_collisions() -> void:
+func _handle_collisions(delta: float) -> void:
 	var space_state = get_world_2d().direct_space_state
 	var point_i: int = -1
 	for col_shape: CollisionShape2D in animatable_body.get_children().filter(func (c): return c is CollisionShape2D):
+		# check each segment for collision
 		point_i +=1
 		var query := PhysicsShapeQueryParameters2D.new()
 		query.shape = col_shape.shape
@@ -45,42 +46,32 @@ func _handle_collisions() -> void:
 		var contacts := space_state.collide_shape(query)
 		var intersection := space_state.intersect_shape(query)
 		
+		# handle each collision on this segment
+		# rare that this ever goes more than once, unless small segment number or lots of bodies
 		for intersect_i in range(len(intersection)):
-			# rare that this ever goes more than once, unless small segment number or lots of bodies
-			#var collider: Node2D = collider_info.collider
-			#var collider_position: = collider.global_position
-			var collider_info := intersection[intersect_i]
-			var collider: Node2D = collider_info.collider
-			var collision_point := contacts[intersect_i*2] # first item in pair is shape
+			var collider_dict := intersection[intersect_i]
+			var collider: Object = collider_dict.collider
+			var collision_point := contacts[intersect_i*2] # first item in vector pairs is the shape contact
+			var segment_velocity: Vector2 = ( (_pos[point_i] - _pos_prev[point_i]) + (_pos[point_i+1] - _pos_prev[point_i+1]) ) / 2
+			segment_velocity /= delta # convert verlet implicit velocity to explicit (per second)
 			
+			var impulse_magnitude: float = 10
+			if collider is RigidBody2D:
+				var relative_velocity: Vector2 = collider.linear_velocity - segment_velocity
+				impulse_magnitude = relative_velocity.length() * collider.mass * delta
+			elif collider is CharacterBody2D:
+				var relative_velocity: Vector2 = collider.velocity - segment_velocity
+				impulse_magnitude = relative_velocity.length() * 0.5 # CharacterBody2D usually have lower mass
+			elif collider is StaticBody2D:
+				var relative_velocity := -segment_velocity
+				impulse_magnitude = relative_velocity.length() * 2 # Static bodies are immovable, so increase impulse
+			
+			# apply impulse to both points controlling the segment, weighted based on where the collision occurs along the segment
 			var segment_start: Vector2 = col_shape.global_position + col_shape.shape.a
 			var segment_end: Vector2 = col_shape.global_position + col_shape.shape.b
-			var impulse_magnitude: float = 10
-			var segment_velocity: Vector2= ( (_pos[point_i] - _pos_prev[point_i]) + (_pos[point_i+1] - _pos_prev[point_i+1]) ) / 2
-			
-			match typeof(collider):
-				RigidBody2D:
-					var b := collider as RigidBody2D
-					var relative_velocity: Vector2 = b.linear_velocity - segment_velocity
-					impulse_magnitude = relative_velocity.length() * b.mass
-				
-				CharacterBody2D:
-					var b := collider as CharacterBody2D
-					var relative_velocity: Vector2= b.velocity - segment_velocity
-					impulse_magnitude = relative_velocity.length() * 0.5 # CharacterBody2D usually have lower mass
-				
-				StaticBody2D:
-					var relative_velocity := -segment_velocity
-					impulse_magnitude = relative_velocity.length() * 2 # Static bodies are immovable, so increase impulse
-
-
 			var segment_length := segment_start.distance_to(segment_end)
 			var ratio := segment_start.distance_to(collision_point) / segment_length
 			ratio = clamp(ratio, 0.0, 1.0) # floating point errors will sometimes result in a ratio a bit above 1 (maybe below zero, I haven't seen that in testing)
-			
-			var force_direction = (contacts[1] - collision_point).normalized()
-			#var force_direction2 = (col_shape.global_position - collider_position).normalized()
-			#print("force_dir1: ", force_direction, " force_dir2: ", force_direction2, " col_pos: ", collider_position, " seg: ", {"a":col_shape.shape.a, "b":col_shape.shape.b})
-			_apply_impulse(force_direction * impulse_magnitude * ratio , point_i)
-			_apply_impulse(force_direction * impulse_magnitude * (1 - ratio) , point_i + 1)
-			#apply_force_to_rope(force_direction)
+			var impulse_direction = (contacts[1] - collision_point).normalized()
+			_apply_impulse(impulse_direction * impulse_magnitude * ratio , point_i)
+			_apply_impulse(impulse_direction * impulse_magnitude * (1 - ratio) , point_i + 1)
