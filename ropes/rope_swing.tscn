@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://der36ibpkevao"]
 
 [ext_resource type="Script" path="res://ropes/rope_swing.gd" id="1_5jw6y"]
-[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="1_7ht4t"]
-[ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="2_esqum"]
+[ext_resource type="Script" path="res://ropes/rope.gd" id="2_2868s"]
+[ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="2_esqum"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hbe1n"]
 size = Vector2(124, 122)
@@ -10,14 +10,16 @@ size = Vector2(124, 122)
 [node name="RopeSwing" type="StaticBody2D"]
 script = ExtResource("1_5jw6y")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_esqum")
+
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_hbe1n")
 
-[node name="Rope" parent="." instance=ExtResource("1_7ht4t")]
+[node name="MyRope" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_2868s")
 tightness = 40
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_esqum")
 
 [node name="PinJoint2D" type="PinJoint2D" parent="."]
 node_a = NodePath("..")

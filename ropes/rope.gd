@@ -1,5 +1,5 @@
 @tool
-class_name Rope
+class_name MyRope
 extends Node2D
 
 # TODO: ropeSize is not an exact science, because of the constraint size

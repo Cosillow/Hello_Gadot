@@ -1,8 +1,8 @@
 @tool
 class_name CollisionShapeRope
-extends Rope
+extends MyRope
 
-func _move_segments(collision_obj: CollisionObject2D) -> void:
+func _move_segments_within_collisions_object(collision_obj: CollisionObject2D) -> void:
 	var points := self.finalPosition
 	var p_count: int = len(points)
 	var seg_count: int = collision_obj.get_child_count()

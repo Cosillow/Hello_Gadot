@@ -3,14 +3,14 @@ extends StaticBody2D
 
 @export var attachedBody: RigidBody2D = null
 @export var ropeAnchorNode: Node2D = null
-@onready var rope: Rope = $Rope
+@onready var rope: MyRope = %MyRope
 @onready var pin_joint: PinJoint2D = $PinJoint2D
 
 func _ready() -> void:
 	rope.attached = ropeAnchorNode
-	pin_joint.node_b = attachedBody.get_path()
+	if attachedBody:
+		pin_joint.node_b = attachedBody.get_path()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
 
@@ -21,7 +21,7 @@ func attach_player(player: RigidPlayer):
 
 func detach(final_velocity: Vector2 = Vector2.ZERO):
 	# TODO: take in final veloctiy to make rope look more realistic on detach
-	rope.set_endpoint_velocity(final_velocity)
+	rope.apply_endpoint_impulse(final_velocity)
 	attachedBody = null
 	ropeAnchorNode = null
 	rope.attached = null

@@ -8,19 +8,18 @@ extends CollisionShapeRope
 		if not area_2d: return
 		area_2d.collision_mask = mask
 
-@onready var area_2d: CollisionObject2D = %Area2dSegments
+@onready var area_2d := Area2D.new()
 
 func _ready() -> void:
 	super()
 	area_2d.collision_mask = mask
+	area_2d.collision_layer = 0
+	add_child(area_2d, false, InternalMode.INTERNAL_MODE_FRONT)
+	_move_segments_within_collisions_object(area_2d)
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	super(delta)
-	_move_segments(area_2d)
-
-func _is_child_affixed(c: Node)-> bool:
-	# prevent area segments from being oriented at end of rope
-	return super(c) and c != area_2d
+	_move_segments_within_collisions_object(area_2d)
 
 func _on_body_entered(body: Node2D) -> void:
 	print(body)

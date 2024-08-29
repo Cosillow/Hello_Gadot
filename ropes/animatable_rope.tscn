@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bqpjpn3whh8xl"]
-
-[ext_resource type="Script" path="res://anim_rope.gd" id="2_rmyuj"]
-
-[node name="AnimatableRope" type="Node2D"]
-script = ExtResource("2_rmyuj")

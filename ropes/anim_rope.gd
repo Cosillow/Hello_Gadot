@@ -27,10 +27,11 @@ func _ready() -> void:
 	animatable_body.physics_material_override = physics_material_override
 	animatable_body.sync_to_physics = false
 	add_child(animatable_body, false, InternalMode.INTERNAL_MODE_FRONT)
+	_move_segments_within_collisions_object(animatable_body)
 
 func _physics_process(delta: float) -> void:
 	super(delta)
-	_move_segments(animatable_body)
+	_move_segments_within_collisions_object(animatable_body)
 	_handle_collisions(delta)
 
 func _handle_collisions(delta: float) -> void:
@@ -67,6 +68,7 @@ func _handle_collisions(delta: float) -> void:
 				impulse_magnitude = relative_velocity.length() * 2 # Static bodies are immovable, so increase impulse
 			
 			# apply impulse to both points controlling the segment, weighted based on where the collision occurs along the segment
+			# impulse affects _pos_prev, so it only affects next physics tic
 			var segment_start: Vector2 = col_shape.global_position + col_shape.shape.a
 			var segment_end: Vector2 = col_shape.global_position + col_shape.shape.b
 			var segment_length := segment_start.distance_to(segment_end)

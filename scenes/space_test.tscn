@@ -1,22 +1,21 @@
-[gd_scene load_steps=9 format=3 uid="uid://c2gg3xyo07yng"]
+[gd_scene load_steps=8 format=3 uid="uid://c2gg3xyo07yng"]
 
 [ext_resource type="Script" path="res://scripts/space_controller.gd" id="1_v2n54"]
-[ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="2_42h7o"]
-[ext_resource type="PackedScene" uid="uid://b8lormv86bklw" path="res://ropes/area_rope.tscn" id="3_vjh8a"]
-[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="4_lv1lt"]
+[ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="2_42h7o"]
+[ext_resource type="Script" path="res://ropes/area_rope.gd" id="3_hw5l5"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
 friction = 0.0
 bounce = 0.06
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
-radius = 16.0312
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x8h5h"]
 bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ndur0"]
 radius = 74.012
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
+radius = 16.0312
 
 [node name="Space" type="Node2D"]
 
@@ -48,16 +47,9 @@ script = ExtResource("1_v2n54")
 bounce_ratio = 0.005
 metadata/_edit_group_ = true
 
-[node name="Polygon2D2" type="Polygon2D" parent="ControlledBody"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.700056, 0.483817, 0.997643, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="RopeSling" parent="ControlledBody" instance=ExtResource("3_vjh8a")]
+[node name="RopeSling" type="Node2D" parent="ControlledBody"]
 unique_name_in_owner = true
+script = ExtResource("3_hw5l5")
 rope_length = 400.0
 segment_number = 30
 gravity = Vector2(0, 0)
@@ -79,45 +71,13 @@ shape = SubResource("CircleShape2D_ndur0")
 color = Color(0.3053, 0.71, 0.46718, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 
-[node name="DecalRope" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
-rope_length = 100.0
-offset = Vector2(40, 0)
-gravity = Vector2(0, 0)
-tightness = 3
-damping = 0.98
-color = Color(1, 1, 1, 1)
-width = 5.0
-attached = NodePath("..")
+[node name="Polygon2D2" type="Polygon2D" parent="ControlledBody"]
+scale = Vector2(0.217391, 0.217391)
+color = Color(0.700056, 0.483817, 0.997643, 1)
+polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 
-[node name="DecalRope4" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
-rope_length = 100.0
-offset = Vector2(0, 40)
-gravity = Vector2(0, 0)
-tightness = 3
-damping = 0.98
-color = Color(0.414304, 0, 0.204317, 1)
-width = 5.0
-attached = NodePath("..")
-
-[node name="DecalRope2" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
-rope_length = 100.0
-offset = Vector2(-40, 0)
-gravity = Vector2(0, 0)
-tightness = 3
-damping = 1.0
-color = Color(0, 0, 0, 1)
-width = 5.0
-attached = NodePath("..")
-
-[node name="DecalRope3" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_lv1lt")]
-rope_length = 100.0
-offset = Vector2(0, -40)
-gravity = Vector2(0, 0)
-tightness = 3
-damping = 1.0
-color = Color(0.246334, 0.000622812, 0.582798, 1)
-width = 5.0
-attached = NodePath("..")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody"]
+shape = SubResource("CircleShape2D_pocej")
 
 [node name="Camera2D" type="Camera2D" parent="ControlledBody"]
 position = Vector2(17.2217, 105.044)

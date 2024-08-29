@@ -1,9 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://wwxuv0ca73ev"]
+[gd_scene load_steps=9 format=3 uid="uid://wwxuv0ca73ev"]
 
-[ext_resource type="Texture2D" uid="uid://c5qd8de4d3ab1" path="res://icon.svg" id="1_ky3cx"]
+[ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="1_ky3cx"]
+[ext_resource type="Script" path="res://ropes/character_rope.gd" id="2_sut83"]
 [ext_resource type="Script" path="res://scripts/space_controller.gd" id="2_tuc74"]
-[ext_resource type="PackedScene" uid="uid://bqpjpn3whh8xl" path="res://ropes/animatable_rope.tscn" id="3_qdhoj"]
-[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="4_vypor"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
 friction = 0.0
@@ -11,10 +10,7 @@ friction = 0.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
 radius = 16.0312
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4oj57"]
-
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x8h5h"]
-bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ndur0"]
 radius = 74.012
@@ -23,7 +19,7 @@ radius = 74.012
 
 [node name="Space" type="Node2D"]
 
-[node name="ControlledBody" type="RigidBody2D" parent="."]
+[node name="MyController" type="RigidBody2D" parent="."]
 position = Vector2(-709, -174)
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -36,79 +32,40 @@ thrust = 2000.0
 bounce_ratio = 0.005
 metadata/_edit_group_ = true
 
-[node name="Polygon2D2" type="Polygon2D" parent="ControlledBody"]
+[node name="Polygon2D2" type="Polygon2D" parent="MyController"]
 scale = Vector2(0.217391, 0.217391)
 color = Color(0.700056, 0.483817, 0.997643, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController"]
 shape = SubResource("CircleShape2D_pocej")
 
-[node name="RopeSling" parent="ControlledBody" instance=ExtResource("3_qdhoj")]
+[node name="RopeSling" type="Node2D" parent="MyController"]
 unique_name_in_owner = true
-physics_material_override = SubResource("PhysicsMaterial_4oj57")
-layer = 2
+script = ExtResource("2_sut83")
+layer = 4
 mask = 4
-rope_length = 610.0
+rope_length = 600.0
 segment_number = 30
 gravity = Vector2(0, 0)
 damping = 0.99
 end_stiffness = 0.98
+color = Color(0.65, 0.393683, 0.0585, 0)
 width = 10.0
 
-[node name="AttachedAnimBody" type="AnimatableBody2D" parent="ControlledBody/RopeSling"]
+[node name="AttachedAnimBody" type="AnimatableBody2D" parent="MyController/RopeSling"]
 unique_name_in_owner = true
-position = Vector2(0, 589.667)
+position = Vector2(0, 580)
 collision_mask = 0
 physics_material_override = SubResource("PhysicsMaterial_x8h5h")
 sync_to_physics = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody/RopeSling/AttachedAnimBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/RopeSling/AttachedAnimBody"]
 shape = SubResource("CircleShape2D_ndur0")
 
-[node name="Polygon2D" type="Polygon2D" parent="ControlledBody/RopeSling/AttachedAnimBody"]
+[node name="Polygon2D" type="Polygon2D" parent="MyController/RopeSling/AttachedAnimBody"]
 color = Color(0.3053, 0.71, 0.46718, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="DecalRope" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_vypor")]
-rope_length = 100.0
-offset = Vector2(40, 0)
-gravity = Vector2(0, 0)
-tightness = 3
-damping = 0.98
-color = Color(1, 1, 1, 1)
-width = 5.0
-attached = NodePath("..")
-
-[node name="DecalRope4" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_vypor")]
-rope_length = 100.0
-offset = Vector2(0, 40)
-gravity = Vector2(0, 0)
-tightness = 3
-damping = 0.98
-color = Color(0.414304, 0, 0.204317, 1)
-width = 5.0
-attached = NodePath("..")
-
-[node name="DecalRope2" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_vypor")]
-rope_length = 100.0
-offset = Vector2(-40, 0)
-gravity = Vector2(0, 0)
-tightness = 3
-damping = 1.0
-color = Color(0, 0, 0, 1)
-width = 5.0
-attached = NodePath("..")
-
-[node name="DecalRope3" parent="ControlledBody/RopeSling/AttachedAnimBody" node_paths=PackedStringArray("attached") instance=ExtResource("4_vypor")]
-rope_length = 100.0
-offset = Vector2(0, -40)
-gravity = Vector2(0, 0)
-tightness = 3
-damping = 1.0
-color = Color(0.246334, 0.000622812, 0.582798, 1)
-width = 5.0
-attached = NodePath("..")
 
 [node name="ControlledBody12" type="RigidBody2D" parent="."]
 position = Vector2(152, 4)
@@ -352,4 +309,4 @@ position = Vector2(-174, -276)
 zoom = Vector2(0.3, 0.3)
 position_smoothing_enabled = true
 
-[connection signal="body_exited" from="ControlledBody" to="ControlledBody" method="_on_body_exited"]
+[connection signal="body_exited" from="MyController" to="MyController" method="_on_body_exited"]

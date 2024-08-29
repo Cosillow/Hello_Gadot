@@ -13,10 +13,13 @@ extends RigidBody2D
 		_thrust_vector = Vector2(val, val)
 @export var bounce_ratio: float = 0.1
 
-@onready var rope_sling: Rope = %RopeSling
+@onready var rope_sling: MyRope = %RopeSling
 @onready var attached_body: AnimatableBody2D = %AttachedAnimBody
 
 var _thrust_vector := Vector2.ZERO
+
+func _ready() -> void:
+	_thrust_vector = Vector2(thrust, thrust)
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	var X_DIR = Input.get_axis("move_left", "move_right")

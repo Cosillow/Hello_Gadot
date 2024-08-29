@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/SwingingPlatform.gd" id="1_0nnvo"]
 [ext_resource type="PackedScene" uid="uid://bh10roc2g4e84" path="res://scenes/platform.tscn" id="2_hgxmw"]
-[ext_resource type="PackedScene" uid="uid://bjxxbc7q2u1o8" path="res://ropes/rope.tscn" id="3_ig54k"]
+[ext_resource type="Script" path="res://ropes/rope.gd" id="3_n141d"]
 
 [node name="SwingingPlatform" type="Node2D"]
 script = ExtResource("1_0nnvo")
@@ -20,14 +20,13 @@ initial_velocity_max = 405.82
 scale_amount_max = 4.0
 color = Color(0.747834, 0.456959, 0.992501, 1)
 
-[node name="Rope2" parent="TopPlatform" instance=ExtResource("3_ig54k")]
-damping = 0.9
-end_stiffness = null
+[node name="MyRope" type="Node2D" parent="TopPlatform"]
+script = ExtResource("3_n141d")
 
-[node name="Platform" parent="TopPlatform/Rope2" instance=ExtResource("2_hgxmw")]
-position = Vector2(0, 2619.97)
+[node name="Platform" parent="TopPlatform/MyRope" instance=ExtResource("2_hgxmw")]
+position = Vector2(0, 180.009)
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="TopPlatform/Rope2/Platform"]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="TopPlatform/MyRope/Platform"]
 direction = Vector2(0, 1)
 spread = 2.2
 gravity = Vector2(0, 50)
