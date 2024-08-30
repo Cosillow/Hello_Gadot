@@ -73,6 +73,7 @@ func _get_configuration_warnings():
 func _ready() -> void:
 	_line_2d.default_color = color
 	_line_2d.width = width
+	_line_2d.end_cap_mode = Line2D.LINE_CAP_ROUND
 	add_child(_line_2d, false, InternalMode.INTERNAL_MODE_FRONT)
 	_resize_arrays()
 	
