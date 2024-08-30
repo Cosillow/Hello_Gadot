@@ -6,6 +6,7 @@
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
 friction = 0.0
+bounce = 0.44
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
 radius = 16.0312
@@ -43,19 +44,22 @@ shape = SubResource("CircleShape2D_pocej")
 [node name="RopeSling" type="Node2D" parent="MyController"]
 unique_name_in_owner = true
 script = ExtResource("2_sut83")
-layer = 4
+bounce = 0.1
+body_affect_factor = 3.0
+layer = 0
 mask = 4
 rope_length = 600.0
 segment_number = 30
 gravity = Vector2(0, 0)
+tightness = 10
 damping = 0.99
-end_stiffness = 0.98
-color = Color(0.65, 0.393683, 0.0585, 0)
+end_stiffness = 0.8
+color = Color(0.647059, 0.388235, 0.054902, 0)
 width = 10.0
 
 [node name="AttachedAnimBody" type="AnimatableBody2D" parent="MyController/RopeSling"]
 unique_name_in_owner = true
-position = Vector2(0, 580)
+position = Vector2(538.774, 97.5848)
 collision_mask = 0
 physics_material_override = SubResource("PhysicsMaterial_x8h5h")
 sync_to_physics = false
@@ -304,9 +308,9 @@ position = Vector2(348.5, -269)
 scale = Vector2(0.304688, 17.0703)
 texture = ExtResource("1_ky3cx")
 
-[node name="Camera2D" type="Camera2D" parent="world"]
-position = Vector2(-174, -276)
-zoom = Vector2(0.3, 0.3)
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-163, -268)
+zoom = Vector2(0.28, 0.28)
 position_smoothing_enabled = true
 
 [connection signal="body_exited" from="MyController" to="MyController" method="_on_body_exited"]
