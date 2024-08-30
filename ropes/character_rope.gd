@@ -77,14 +77,6 @@ func _handle_collision(collision: KinematicCollision2D, delta: float) -> void:
 	var depth := collision.get_depth()
 	var segment_start: Vector2 = _pos[seg_i]
 	var segment_end: Vector2 = _pos[seg_i+1]
-	var shape := collision_shape.shape
-	
-	if shape is SegmentShape2D:
-		segment_start = collision_shape.global_position + shape.a
-		segment_end = collision_shape.global_position + shape.b
-	#elif shape is RectangleShape2D:
-		##assert(0)
-		#return
 	
 	var segment_length := segment_start.distance_to(segment_end)
 	var contact_on_segment: Vector2 = Geometry2D.get_closest_point_to_segment(collision_point, segment_start, segment_end)
@@ -96,11 +88,7 @@ func _handle_collision(collision: KinematicCollision2D, delta: float) -> void:
 		
 		
 		# TEST: Calculate depth-based penetration bias to help resolve deep collisions
-		#var penetration_depth: float = collision_point.distance_to(contact_on_segment)
 		impulse_magnitude += depth * depth_bias_factor
-		
-		
-		
 		
 		# apply impulse to RigidBody2D
 		# NOTE: technically... I should be taking the minimum of the restituion (bounce) coefficients
@@ -108,15 +96,15 @@ func _handle_collision(collision: KinematicCollision2D, delta: float) -> void:
 		
 		# apply impulse to both points controlling the segment, weighted based on where the collision occurs along the segment
 		impulse_magnitude *= delta # NOTE: convert explicit back to verlet for rope
-		# `_apply_impulse` only affects _pos_prev, so it affects next physics tic (good because buffering)
+		# NOTE: `_apply_impulse` only affects _pos_prev, so it affects next physics tic (good because buffering)
 		_apply_impulse(normal * body_affect_factor *impulse_magnitude * ratio , seg_i)
 		_apply_impulse(normal * body_affect_factor *impulse_magnitude * (1 - ratio) , seg_i + 1)
 		
 		# TEST: Apply positional correction to resolve penetration
-		var correction_factor: float = 0.1  # Small factor to correct penetration
-		var correction_vector: Vector2 = normal * depth * correction_factor
-		_pos[seg_i] += correction_vector * ratio
-		_pos[seg_i + 1] += correction_vector * (1 - ratio)
+		#var correction_factor: float = 0.1  # Small factor to correct penetration
+		#var correction_vector: Vector2 = normal * depth * correction_factor
+		#_pos[seg_i] += correction_vector * ratio
+		#_pos[seg_i + 1] += correction_vector * (1 - ratio)
 		
 
 class InternalCharacterBody extends CharacterBody2D:
