@@ -26,7 +26,7 @@ extends Node2D
 @export var gravity := Vector2(0,20)
 @export var tightness: int = 100 ## constraint iterations (a ratio more iterations will be applied if rope exceeds length)
 @export_range(0.1, 1, .0001) var damping: float = .9
-@export_range(0.1, .9999, .0001) var end_stiffness: float = .5
+@export_range(0.1, .9999, .0001) var end_strength: float = .5
 @export var color: Color = Color(0.648, 0.389, 0.056)
 @export_range(1, 9999999, 1, "or_greater") var width: float = 2
 @export var attached: Node2D = null :
@@ -102,8 +102,7 @@ func _physics_process(delta)->void:
 	if attached:
 		_endpoint = attached.global_position + offset
 	
-	for i in tightness:
-		_constrain()
+	_constrain()
 	
 	# visually reattach endpoint to node
 	if attached:
@@ -119,7 +118,7 @@ func apply_endpoint_impulse(velocity: Vector2) -> void:
 	_pos_prev[-1] = _pos_prev[-1] - (velocity * damping)
 
 func _apply_impulse(velocity: Vector2, point: int) -> void:
-	_pos_prev[point] = _pos_prev[point] - (velocity * damping)
+	_pos_prev[point] = _pos_prev[point] - (velocity)
 
 func _resize_arrays() -> void:
 	## called by `segment_number` and `rope_length` setters and `_ready`
@@ -139,27 +138,28 @@ func _verlet_integrate_points(delta)->void:
 		_pos[i] += velocity + (gravity * delta)
 
 func _constrain()->void:
-	for i in range(len(_pos)-1):
-		var cur_dist = _pos[i].distance_to(_pos[i+1])
-		var error = _segment_length - cur_dist
-		if error >= 0:
-			continue
-		var percent = error / cur_dist
-		var vec2 = _pos[i+1] - _pos[i]
-		
-		if i == 0:
-			# don't adjust first point (keep on parent)
-			_pos[i+1] += vec2 * percent
-		elif i+1 == segment_number-1:
-			# last constraint (connected to endpoint)
-			if attached:
-				_pos[i] -= vec2 * percent
+	for _x in tightness:
+		for i in range(len(_pos)-1):
+			var cur_dist = _pos[i].distance_to(_pos[i+1])
+			var error = _segment_length - cur_dist
+			if error >= 0:
+				continue
+			var percent = error / cur_dist
+			var vec2 = _pos[i+1] - _pos[i]
+			
+			if i == 0:
+				# don't adjust first point (keep on parent)
+				_pos[i+1] += vec2 * percent
+			elif i+1 == segment_number-1:
+				# last constraint (connected to endpoint)
+				if attached:
+					_pos[i] -= vec2 * percent
+				else:
+					_pos[i] -= vec2 * (percent * end_strength)
+					_pos[i+1] += vec2 * (percent * (1 - end_strength))
 			else:
-				_pos[i] -= vec2 * (percent * end_stiffness)
-				_pos[i+1] += vec2 * (percent * (1 - end_stiffness))
-		else:
-			_pos[i] -= vec2 * (percent/2)
-			_pos[i+1] += vec2 * (percent/2)
+				_pos[i] -= vec2 * (percent/2)
+				_pos[i+1] += vec2 * (percent/2)
 
 func _is_attached_processed_first()-> bool:
 	## return true if the attached node will run its _process and _physics_process methods prior to self

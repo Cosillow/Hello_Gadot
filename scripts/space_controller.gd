@@ -30,4 +30,4 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		if state.get_contact_collider_object(i) == attached_body:
 			var normal = state.get_contact_local_normal(i)
 			var relative_velocity = state.get_contact_collider_velocity_at_position(i) - state.get_contact_local_velocity_at_position(i)
-			rope_sling.apply_endpoint_impulse(bounce_ratio * (-normal * relative_velocity.length()))
+			rope_sling.apply_endpoint_impulse(bounce_ratio * (-normal * relative_velocity.length())/ state.step)

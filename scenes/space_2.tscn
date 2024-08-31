@@ -1,26 +1,34 @@
-[gd_scene load_steps=9 format=3 uid="uid://wwxuv0ca73ev"]
+[gd_scene load_steps=13 format=3 uid="uid://wwxuv0ca73ev"]
 
 [ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="1_ky3cx"]
 [ext_resource type="Script" path="res://ropes/character_rope.gd" id="2_sut83"]
 [ext_resource type="Script" path="res://scripts/space_controller.gd" id="2_tuc74"]
+[ext_resource type="Script" path="res://scripts/world_control.gd" id="3_j0b5w"]
+[ext_resource type="Script" path="res://scripts/menu.gd" id="5_7i1r3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
 friction = 0.0
-bounce = 0.44
+bounce = 0.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
 radius = 16.0312
-
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tkwvr"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x8h5h"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ndur0"]
 radius = 74.012
 
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tkwvr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kn076"]
+
+[sub_resource type="Theme" id="Theme_x741b"]
+default_font_size = 50
+
 [node name="Space" type="Node2D"]
 
 [node name="MyController" type="RigidBody2D" parent="."]
+unique_name_in_owner = true
 position = Vector2(-709, -174)
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
@@ -30,7 +38,7 @@ max_contacts_reported = 5
 linear_damp = 0.5
 script = ExtResource("2_tuc74")
 thrust = 2000.0
-bounce_ratio = 0.005
+bounce_ratio = 0.001
 metadata/_edit_group_ = true
 
 [node name="Polygon2D2" type="Polygon2D" parent="MyController"]
@@ -44,219 +52,37 @@ shape = SubResource("CircleShape2D_pocej")
 [node name="RopeSling" type="Node2D" parent="MyController"]
 unique_name_in_owner = true
 script = ExtResource("2_sut83")
-bounce = 0.4
-depth_bias_factor = 0.0
+bounce = 1.0
+body_affect_factor = 2.0
 layer = 0
 mask = 4
 rope_length = 600.0
 segment_number = 30
-gravity = Vector2(0, 100)
+gravity = Vector2(0, 0)
 tightness = 10
 damping = 0.99
-end_stiffness = 0.8
-width = 100.0
+end_strength = 0.98
+width = 10.0
 
-[node name="ControlledBody12" type="RigidBody2D" parent="."]
-position = Vector2(152, 4)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
+[node name="AttachedAnimBody" type="AnimatableBody2D" parent="MyController/RopeSling"]
+unique_name_in_owner = true
+position = Vector2(0, 580)
+collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_x8h5h")
+sync_to_physics = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody12"]
-shape = SubResource("CircleShape2D_pocej")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/RopeSling/AttachedAnimBody"]
+shape = SubResource("CircleShape2D_ndur0")
 
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody12"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
+[node name="Polygon2D" type="Polygon2D" parent="MyController/RopeSling/AttachedAnimBody"]
+color = Color(0.3053, 0.71, 0.46718, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 
-[node name="ControlledBody13" type="RigidBody2D" parent="."]
-position = Vector2(257, 21)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
+[node name="BallSpawner" type="Node2D" parent="."]
+unique_name_in_owner = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody13"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody13"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="ControlledBody14" type="RigidBody2D" parent="."]
-position = Vector2(265, -178)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody14"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody14"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="ControlledBody15" type="RigidBody2D" parent="."]
-position = Vector2(131, -56)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody15"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody15"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="ControlledBody16" type="RigidBody2D" parent="."]
-position = Vector2(330, -30)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody16"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody16"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="ControlledBody17" type="RigidBody2D" parent="."]
-position = Vector2(184, 55)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody17"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody17"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="ControlledBody18" type="RigidBody2D" parent="."]
-position = Vector2(320, 48)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody18"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody18"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="ControlledBody19" type="RigidBody2D" parent="."]
-position = Vector2(343, -117)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody19"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody19"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="ControlledBody20" type="RigidBody2D" parent="."]
-position = Vector2(189, -140)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody20"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody20"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="ControlledBody11" type="RigidBody2D" parent="."]
-position = Vector2(250, -67)
-collision_layer = 4
-collision_mask = 7
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_skp3n")
-gravity_scale = 0.0
-lock_rotation = true
-linear_damp_mode = 1
-linear_damp = 0.01
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledBody11"]
-shape = SubResource("CircleShape2D_pocej")
-
-[node name="Polygon2D3" type="Polygon2D" parent="ControlledBody11"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.84, 0.3444, 0.3857, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="world" type="Node" parent="."]
+[node name="world" type="Node2D" parent="."]
+script = ExtResource("3_j0b5w")
 
 [node name="WorldBoundry" type="StaticBody2D" parent="world"]
 position = Vector2(1740, 0)
@@ -281,45 +107,122 @@ shape = SubResource("WorldBoundaryShape2D_tkwvr")
 
 [node name="WorldBoundry4" type="StaticBody2D" parent="world"]
 position = Vector2(-103, 831)
-rotation = 6.28318
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry4"]
 shape = SubResource("WorldBoundaryShape2D_tkwvr")
 
 [node name="Parallax2D" type="Parallax2D" parent="world"]
+visible = false
 z_index = -1
 repeat_size = Vector2(1000, 0)
-repeat_times = 3
+repeat_times = 4
 
 [node name="Sprite2D3" type="Sprite2D" parent="world/Parallax2D"]
 self_modulate = Color(0.572549, 0, 1, 0.427451)
-position = Vector2(811, -269)
-scale = Vector2(0.953125, 17.0703)
+position = Vector2(466.74, -333.32)
+scale = Vector2(2.91, 52.12)
 texture = ExtResource("1_ky3cx")
 
 [node name="Sprite2D4" type="Sprite2D" parent="world/Parallax2D"]
 self_modulate = Color(0.160784, 1, 1, 0.376471)
-position = Vector2(348.5, -269)
-scale = Vector2(0.304688, 17.0703)
+position = Vector2(4.23999, -333.32)
+scale = Vector2(2.91, 52.12)
 texture = ExtResource("1_ky3cx")
+
+[node name="Menu" type="PanelContainer" parent="world"]
+unique_name_in_owner = true
+self_modulate = Color(0.494118, 0.658824, 0.662745, 1)
+offset_left = -455.0
+offset_top = -868.0
+offset_right = 495.0
+offset_bottom = 382.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_kn076")
+script = ExtResource("5_7i1r3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="world/Menu"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 59
+
+[node name="VBoxRope" type="VBoxContainer" parent="world/Menu/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Label" type="Label" parent="world/Menu/VBoxContainer/VBoxRope"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Rope Controls"
+
+[node name="Detach" type="Button" parent="world/Menu/VBoxContainer/VBoxRope"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 50
+text = "Detach"
+alignment = 0
+
+[node name="Collisions" type="Button" parent="world/Menu/VBoxContainer/VBoxRope"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 50
+text = "Collisions off"
+alignment = 0
+
+[node name="rope_length" type="SpinBox" parent="world/Menu/VBoxContainer/VBoxRope"]
+layout_mode = 2
+theme = SubResource("Theme_x741b")
+max_value = 1000.0
+
+[node name="end_strength" type="SpinBox" parent="world/Menu/VBoxContainer/VBoxRope"]
+layout_mode = 2
+theme = SubResource("Theme_x741b")
+max_value = 1000.0
+step = 0.001
+
+[node name="bounce" type="SpinBox" parent="world/Menu/VBoxContainer/VBoxRope"]
+layout_mode = 2
+theme = SubResource("Theme_x741b")
+max_value = 5.0
+step = 0.001
+
+[node name="body_affect_factor" type="SpinBox" parent="world/Menu/VBoxContainer/VBoxRope"]
+layout_mode = 2
+theme = SubResource("Theme_x741b")
+step = 0.001
+
+[node name="VBoxPlayer" type="VBoxContainer" parent="world/Menu/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Label" type="Label" parent="world/Menu/VBoxContainer/VBoxPlayer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Player Controls
+"
+
+[node name="thrust" type="SpinBox" parent="world/Menu/VBoxContainer/VBoxPlayer"]
+layout_mode = 2
+theme = SubResource("Theme_x741b")
+max_value = 10000.0
+
+[node name="bounce_ratio" type="SpinBox" parent="world/Menu/VBoxContainer/VBoxPlayer"]
+layout_mode = 2
+theme = SubResource("Theme_x741b")
+max_value = 1000.0
+step = 0.001
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-163, -268)
 zoom = Vector2(0.28, 0.28)
 position_smoothing_enabled = true
 
-[node name="AttachedAnimBody" type="AnimatableBody2D" parent="."]
+[node name="AnimHolder" type="Node2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, 580)
-collision_mask = 0
-physics_material_override = SubResource("PhysicsMaterial_x8h5h")
-sync_to_physics = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttachedAnimBody"]
-shape = SubResource("CircleShape2D_ndur0")
-
-[node name="Polygon2D" type="Polygon2D" parent="AttachedAnimBody"]
-color = Color(0.3053, 0.71, 0.46718, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
+position = Vector2(-1263, 1390)
 
 [connection signal="body_exited" from="MyController" to="MyController" method="_on_body_exited"]
