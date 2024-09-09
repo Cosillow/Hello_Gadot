@@ -152,11 +152,14 @@ func _verlet_integrate_points(delta: float) -> void:
 
 func _constrain() -> void:
 	for _x in tightness:
+		var is_constrained := true
 		for i in range(len(_pos) - 1):
 			var cur_dist := _pos[i].distance_to(_pos[i + 1])
 			var error := _segment_length - cur_dist
 			if error >= 0:
 				continue
+			is_constrained = false
+			
 			var percent := error / cur_dist
 			var vec2 := _pos[i + 1] - _pos[i]
 			
@@ -174,6 +177,10 @@ func _constrain() -> void:
 				# all points except start and end
 				_pos[i] -= vec2 * (percent / 2)
 				_pos[i + 1] += vec2 * (percent / 2)
+		if is_constrained:
+			# gone through an entire contraint loop without changing anything
+			#print("loops saved: ", tightness - _x)
+			break
 
 func _is_attached_processed_first()-> bool:
 	## return true if the attached node will run its _process and _physics_process methods prior to self

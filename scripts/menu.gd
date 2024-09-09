@@ -4,7 +4,6 @@ class_name Menu
 var off_screen := -5000
 var tween: Tween = null
 @onready var collisions_btn: Button = %Collisions
-@onready var anim_holder: Node2D = %AnimHolder
 @onready var rope_sling: CharacterRope = %RopeSling
 @onready var v_box_rope: VBoxContainer = %VBoxRope
 @onready var v_box_player: VBoxContainer = %VBoxPlayer

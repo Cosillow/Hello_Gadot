@@ -40,7 +40,6 @@ freeze_mode = 1
 linear_damp = 0.5
 angular_damp = 0.5
 script = ExtResource("2_1411i")
-follow_rope_speed = 10.0
 drag_factor = 40.0
 rope_sling = NodePath("../..")
 

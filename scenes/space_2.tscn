@@ -50,6 +50,7 @@ shape = SubResource("CircleShape2D_pocej")
 
 [node name="RopeSling" parent="MyController" instance=ExtResource("2_finyo")]
 unique_name_in_owner = true
+rope_length = 880.0
 
 [node name="RopeSling2" parent="MyController" instance=ExtResource("2_finyo")]
 rope_length = 900.0
@@ -194,9 +195,5 @@ step = 0.001
 position = Vector2(-163, -268)
 zoom = Vector2(0.28, 0.28)
 position_smoothing_enabled = true
-
-[node name="AnimHolder" type="Node2D" parent="."]
-unique_name_in_owner = true
-position = Vector2(-1263, 1390)
 
 [connection signal="body_exited" from="MyController" to="MyController" method="_on_body_exited"]

@@ -1,6 +1,5 @@
 extends RigidBody2D
 
-@export var follow_rope_speed: float = 50
 @export var drag_factor: float = 100
 @export var rope_sling: CharacterRope = null
 
