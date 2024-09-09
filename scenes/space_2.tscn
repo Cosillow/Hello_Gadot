@@ -1,10 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://wwxuv0ca73ev"]
+[gd_scene load_steps=11 format=3 uid="uid://wwxuv0ca73ev"]
 
 [ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="1_ky3cx"]
-[ext_resource type="Script" path="res://ropes/character_rope.gd" id="2_sut83"]
+[ext_resource type="PackedScene" uid="uid://cnxgpjtbdx04j" path="res://scenes/rope_sling.tscn" id="2_finyo"]
 [ext_resource type="Script" path="res://scripts/space_controller.gd" id="2_tuc74"]
 [ext_resource type="Script" path="res://scripts/world_control.gd" id="3_j0b5w"]
-[ext_resource type="Script" path="res://scripts/attached_rigid.gd" id="3_nedgp"]
 [ext_resource type="Script" path="res://scripts/menu.gd" id="5_7i1r3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
@@ -13,13 +12,6 @@ bounce = 0.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
 radius = 99.0
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x8h5h"]
-friction = 0.5
-bounce = 0.66
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_ndur0"]
-radius = 74.012
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tkwvr"]
 
@@ -56,167 +48,17 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 position = Vector2(-1, 6)
 shape = SubResource("CircleShape2D_pocej")
 
-[node name="RopeSling" type="Node2D" parent="MyController" node_paths=PackedStringArray("attached")]
+[node name="RopeSling" parent="MyController" instance=ExtResource("2_finyo")]
 unique_name_in_owner = true
-script = ExtResource("2_sut83")
-bounce = 1.0
-body_affect_factor = 2.0
-layer = 0
-mask = 4
-rope_length = 600.0
-segment_number = 30
-gravity = Vector2(0, 0)
-tightness = 10
-damping = 0.99
-end_strength = 0.98
-color = Color(0.487387, 0.689304, 0.26823, 1)
-width = 10.0
-attached = NodePath("Node/AttachedBody")
-attached_strength = 0.1
 
-[node name="Node" type="Node" parent="MyController/RopeSling"]
-
-[node name="AttachedBody" type="RigidBody2D" parent="MyController/RopeSling/Node" node_paths=PackedStringArray("rope_sling")]
-unique_name_in_owner = true
-top_level = true
-position = Vector2(4, 472)
-physics_material_override = SubResource("PhysicsMaterial_x8h5h")
-gravity_scale = 0.0
-lock_rotation = true
-freeze_mode = 1
-linear_damp = 0.5
-angular_damp = 0.5
-script = ExtResource("3_nedgp")
-follow_rope_speed = 10.0
-drag_factor = 40.0
-rope_sling = NodePath("../..")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/RopeSling/Node/AttachedBody"]
-shape = SubResource("CircleShape2D_ndur0")
-
-[node name="Polygon2D" type="Polygon2D" parent="MyController/RopeSling/Node/AttachedBody"]
-color = Color(0.3053, 0.71, 0.46718, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="RopeSling2" type="Node2D" parent="MyController" node_paths=PackedStringArray("attached")]
-script = ExtResource("2_sut83")
-bounce = 1.0
-body_affect_factor = 2.0
-layer = 0
-mask = 4
-rope_length = 700.0
-segment_number = 30
-gravity = Vector2(0, 0)
-tightness = 10
-damping = 0.99
-end_strength = 0.98
-color = Color(0.487387, 0.689304, 0.26823, 1)
-width = 10.0
-attached = NodePath("Node/AttachedBody2")
-attached_strength = 0.1
-
-[node name="Node" type="Node" parent="MyController/RopeSling2"]
-
-[node name="AttachedBody2" type="RigidBody2D" parent="MyController/RopeSling2/Node" node_paths=PackedStringArray("rope_sling")]
-top_level = true
-position = Vector2(4, 472)
-physics_material_override = SubResource("PhysicsMaterial_x8h5h")
-gravity_scale = 0.0
-lock_rotation = true
-freeze_mode = 1
-linear_damp = 0.5
-angular_damp = 0.5
-script = ExtResource("3_nedgp")
-follow_rope_speed = 10.0
-drag_factor = 40.0
-rope_sling = NodePath("../..")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/RopeSling2/Node/AttachedBody2"]
-shape = SubResource("CircleShape2D_ndur0")
-
-[node name="Polygon2D" type="Polygon2D" parent="MyController/RopeSling2/Node/AttachedBody2"]
-color = Color(0.3053, 0.71, 0.46718, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="RopeSling3" type="Node2D" parent="MyController" node_paths=PackedStringArray("attached")]
-script = ExtResource("2_sut83")
-bounce = 1.0
-body_affect_factor = 2.0
-layer = 0
-mask = 4
-rope_length = 1200.0
-segment_number = 30
-gravity = Vector2(0, 0)
-tightness = 10
-damping = 0.99
-end_strength = 0.98
-color = Color(0.487387, 0.689304, 0.26823, 1)
-width = 10.0
-attached = NodePath("Node/AttachedBody2")
-attached_strength = 0.1
-
-[node name="Node" type="Node" parent="MyController/RopeSling3"]
-
-[node name="AttachedBody2" type="RigidBody2D" parent="MyController/RopeSling3/Node" node_paths=PackedStringArray("rope_sling")]
-top_level = true
-position = Vector2(4, 472)
-physics_material_override = SubResource("PhysicsMaterial_x8h5h")
-gravity_scale = 0.0
-lock_rotation = true
-freeze_mode = 1
-linear_damp = 0.5
-angular_damp = 0.5
-script = ExtResource("3_nedgp")
-follow_rope_speed = 10.0
-drag_factor = 40.0
-rope_sling = NodePath("../..")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/RopeSling3/Node/AttachedBody2"]
-shape = SubResource("CircleShape2D_ndur0")
-
-[node name="Polygon2D" type="Polygon2D" parent="MyController/RopeSling3/Node/AttachedBody2"]
-color = Color(0.3053, 0.71, 0.46718, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
-
-[node name="RopeSling4" type="Node2D" parent="MyController" node_paths=PackedStringArray("attached")]
-script = ExtResource("2_sut83")
-bounce = 1.0
-body_affect_factor = 2.0
-layer = 0
-mask = 4
+[node name="RopeSling2" parent="MyController" instance=ExtResource("2_finyo")]
 rope_length = 900.0
-segment_number = 30
-gravity = Vector2(0, 0)
-tightness = 10
-damping = 0.99
-end_strength = 0.98
-color = Color(0.487387, 0.689304, 0.26823, 1)
-width = 10.0
-attached = NodePath("Node/AttachedBody2")
-attached_strength = 0.1
 
-[node name="Node" type="Node" parent="MyController/RopeSling4"]
+[node name="RopeSling3" parent="MyController" instance=ExtResource("2_finyo")]
+rope_length = 1000.0
 
-[node name="AttachedBody2" type="RigidBody2D" parent="MyController/RopeSling4/Node" node_paths=PackedStringArray("rope_sling")]
-top_level = true
-position = Vector2(4, 472)
-physics_material_override = SubResource("PhysicsMaterial_x8h5h")
-gravity_scale = 0.0
-lock_rotation = true
-freeze_mode = 1
-linear_damp = 0.5
-angular_damp = 0.5
-script = ExtResource("3_nedgp")
-follow_rope_speed = 10.0
-drag_factor = 40.0
-rope_sling = NodePath("../..")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/RopeSling4/Node/AttachedBody2"]
-shape = SubResource("CircleShape2D_ndur0")
-
-[node name="Polygon2D" type="Polygon2D" parent="MyController/RopeSling4/Node/AttachedBody2"]
-color = Color(0.3053, 0.71, 0.46718, 1)
-polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
+[node name="RopeSling4" parent="MyController" instance=ExtResource("2_finyo")]
+rope_length = 800.0
 
 [node name="BallSpawner" type="Node2D" parent="."]
 unique_name_in_owner = true
