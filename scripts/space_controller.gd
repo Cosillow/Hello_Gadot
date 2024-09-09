@@ -12,22 +12,22 @@ extends RigidBody2D
 		thrust = val
 		_thrust_vector = Vector2(val, val)
 @export var bounce_ratio: float = 0.1
+@export var drag_factor: float = 100
 
 @onready var rope_sling: MyRope = %RopeSling
 @onready var attached_body: PhysicsBody2D = %AttachedBody
 
 var _thrust_vector := Vector2.ZERO
+var _calculated_drag := Vector2.ZERO
 
 func _ready() -> void:
 	_thrust_vector = Vector2(thrust, thrust)
+	rope_sling.connect("rope_stretched", _on_stretch)
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	var X_DIR = Input.get_axis("move_left", "move_right")
 	var Y_DIR = Input.get_axis("move_up", "move_down")
-	state.apply_central_force(_thrust_vector * Vector2(X_DIR, Y_DIR).normalized())
-	
-	for i in state.get_contact_count():
-		if state.get_contact_collider_object(i) == attached_body:
-			var normal = state.get_contact_local_normal(i)
-			var relative_velocity = state.get_contact_collider_velocity_at_position(i) - state.get_contact_local_velocity_at_position(i)
-			rope_sling.apply_endpoint_impulse(bounce_ratio * (-normal * relative_velocity.length())/ state.step)
+	state.apply_central_force(_calculated_drag + _thrust_vector * Vector2(X_DIR, Y_DIR).normalized())
+
+func _on_stretch(stretch_length: float) -> void:
+	_calculated_drag = drag_factor * stretch_length * rope_sling.start_direction

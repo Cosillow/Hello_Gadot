@@ -15,6 +15,3 @@ func _input(event: InputEvent) -> void:
 			child.queue_free()
 	elif event.is_action_pressed("menu"):
 		menu.animate_view()
-
-func _process(delta: float) -> void:
-	pass

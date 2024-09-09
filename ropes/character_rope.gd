@@ -84,7 +84,7 @@ func _handle_collision(collision: KinematicCollision2D, delta: float) -> void:
 	var segment_length := segment_start.distance_to(segment_end)
 	var contact_on_segment: Vector2 = Geometry2D.get_closest_point_to_segment(collision_point, segment_start, segment_end)
 	var ratio := segment_start.distance_to(contact_on_segment) / segment_length
-	ratio = clamp(ratio, 0.0, 1.0) # NOTE: floating point errors will sometimes result in a ratio a bit above 1 (maybe below zero, I haven't seen that in testing)
+	ratio = clampf(ratio, 0.0, 1.0) # NOTE: floating point errors will sometimes result in a ratio a bit above 1 (maybe below zero, I haven't seen that in testing)
 	
 	# assure normal is only ever perpendicular to segments
 	# NOTE: `collision.get_normal()` will sometimes give normal from top or bottom of RectShape2D

@@ -9,6 +9,9 @@ extends Node2D
 #		then the constraint back makes it act weird (I think)
 # TODO: fix `segment_number` runtime adjustment unexpected physics (not too pressing unless I want to use that)
 
+## emits the magnitude of stretch beyond `rope_length` or zero
+signal rope_stretched(length: float)
+
 @export_range(1, 9999999, 1, "or_greater") var rope_length:float = 200 :
 	set(val):
 		if val == rope_length or val < 1: return
@@ -34,24 +37,29 @@ extends Node2D
 		attached = val
 		update_configuration_warnings()
 		assert(_is_attached_processed_first())
+@export var attached_strength: float = 1.0
 
 @onready var _line_2d := Line2D.new()
 
 var _pos: PackedVector2Array
 var _pos_prev: PackedVector2Array
-var _endpoint : Vector2 :
-	get:
-		return _pos[-1]
-	set(val):
-		_pos[-1] = val
 var _translation: Vector2 :
 	get:
 		return global_position + offset
 var _segment_length: float = rope_length / segment_number
 
+var endpoint : Vector2 :
+	get:
+		return _pos[-1]
+	set(val):
+		_pos[-1] = val
+## normalized direction vector of the end of the rope
 var endDirection: Vector2 :
 	get:
-		return _pos[-2].direction_to(_endpoint)
+		return _pos[-2].direction_to(endpoint)
+var start_direction: Vector2 :
+	get:
+		return _pos[0].direction_to(_pos[1])
 var finalPosition: PackedVector2Array :
 	get:
 		return _pos * Transform2D().translated(_translation)
@@ -82,6 +90,8 @@ func _ready() -> void:
 	for i in range(segment_number):
 		_pos[i] = global_position + Vector2(0, _segment_length *i)
 		_pos_prev[i] = global_position + Vector2(0, _segment_length *i)
+	if attached:
+		endpoint = attached.global_position + offset
 	_fix_children_to_endpoint()
 
 func _process(_delta: float) -> void:
@@ -90,7 +100,7 @@ func _process(_delta: float) -> void:
 	#queue_redraw()
 	_line_2d.points = finalPosition
 
-func _physics_process(delta)->void:
+func _physics_process(delta: float) -> void:
 	# set start of rope
 	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
 	_pos[0] = global_position
@@ -100,13 +110,16 @@ func _physics_process(delta)->void:
 	
 	# allow attached to affect rope before constraints
 	if attached:
-		_endpoint = attached.global_position + offset
+		endpoint = endpoint.lerp(attached.global_position + offset, attached_strength) 
 	
 	_constrain()
 	
 	# visually reattach endpoint to node
-	if attached:
-		_endpoint = attached.global_position + offset
+	#if attached: #TODO: I think constrain check may make this redundant
+		#endpoint = attached.global_position + offset
+	
+	var actual_length := _pos[0].distance_to(endpoint)
+	rope_stretched.emit(maxf(actual_length - rope_length, 0))
 
 func _notification(what):
 	match what:
@@ -114,7 +127,7 @@ func _notification(what):
 			assert(get_parent() is Node2D)
 
 func apply_endpoint_impulse(velocity: Vector2) -> void:
-	#_pos_prev[-1] = _endpoint - (velocity * damping)
+	#_pos_prev[-1] = endpoint - (velocity * damping)
 	_pos_prev[-1] = _pos_prev[-1] - (velocity * damping)
 
 func _apply_impulse(velocity: Vector2, point: int) -> void:
@@ -129,43 +142,44 @@ func _resize_arrays() -> void:
 func _fix_children_to_endpoint() -> void:
 	for c in get_children(false):
 		if c is Node2D:
-			c.global_position = _endpoint #- _translation
+			c.global_position = endpoint #- _translation
 
-func _verlet_integrate_points(delta)->void:
+func _verlet_integrate_points(delta: float) -> void:
 	for i in range(1, len(_pos)):
-		var velocity = (_pos[i] - _pos_prev[i]) * damping
+		var velocity := (_pos[i] - _pos_prev[i]) * damping
 		_pos_prev[i] = _pos[i]
 		_pos[i] += velocity + (gravity * delta)
 
-func _constrain()->void:
+func _constrain() -> void:
 	for _x in tightness:
-		for i in range(len(_pos)-1):
-			var cur_dist = _pos[i].distance_to(_pos[i+1])
-			var error = _segment_length - cur_dist
+		for i in range(len(_pos) - 1):
+			var cur_dist := _pos[i].distance_to(_pos[i + 1])
+			var error := _segment_length - cur_dist
 			if error >= 0:
 				continue
-			var percent = error / cur_dist
-			var vec2 = _pos[i+1] - _pos[i]
+			var percent := error / cur_dist
+			var vec2 := _pos[i + 1] - _pos[i]
 			
 			if i == 0:
 				# don't adjust first point (keep on parent)
 				_pos[i+1] += vec2 * percent
-			elif i+1 == segment_number-1:
+			elif i + 1 == segment_number - 1:
 				# last constraint (connected to endpoint)
 				if attached:
 					_pos[i] -= vec2 * percent
 				else:
 					_pos[i] -= vec2 * (percent * end_strength)
-					_pos[i+1] += vec2 * (percent * (1 - end_strength))
+					_pos[i + 1] += vec2 * (percent * (1 - end_strength))
 			else:
-				_pos[i] -= vec2 * (percent/2)
-				_pos[i+1] += vec2 * (percent/2)
+				# all points except start and end
+				_pos[i] -= vec2 * (percent / 2)
+				_pos[i + 1] += vec2 * (percent / 2)
 
 func _is_attached_processed_first()-> bool:
 	## return true if the attached node will run its _process and _physics_process methods prior to self
-	if (not attached) or (not attached.is_inside_tree()): return true
-	if not is_inside_tree(): return true
-	return is_greater_than(attached)
+	var no_attached := (not attached) or (not attached.is_inside_tree())
+	var in_tree := is_inside_tree()
+	return no_attached or in_tree or is_greater_than(attached)
 
 #func _draw() -> void:
 	#var rope := finalPosition

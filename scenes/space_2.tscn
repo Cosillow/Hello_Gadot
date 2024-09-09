@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://wwxuv0ca73ev"]
+[gd_scene load_steps=14 format=3 uid="uid://wwxuv0ca73ev"]
 
 [ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="1_ky3cx"]
 [ext_resource type="Script" path="res://ropes/character_rope.gd" id="2_sut83"]
 [ext_resource type="Script" path="res://scripts/space_controller.gd" id="2_tuc74"]
 [ext_resource type="Script" path="res://scripts/world_control.gd" id="3_j0b5w"]
+[ext_resource type="Script" path="res://scripts/attached_rigid.gd" id="3_nedgp"]
 [ext_resource type="Script" path="res://scripts/menu.gd" id="5_7i1r3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
@@ -14,6 +15,8 @@ bounce = 0.5
 radius = 99.0
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x8h5h"]
+friction = 0.5
+bounce = 0.66
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ndur0"]
 radius = 74.012
@@ -29,7 +32,8 @@ default_font_size = 50
 
 [node name="MyController" type="RigidBody2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-709, -174)
+z_index = 5
+position = Vector2(-28, 40)
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -39,6 +43,7 @@ linear_damp = 0.5
 script = ExtResource("2_tuc74")
 thrust = 2000.0
 bounce_ratio = 0.001
+drag_factor = 6.0
 metadata/_edit_group_ = true
 
 [node name="Polygon2D2" type="Polygon2D" parent="MyController"]
@@ -51,7 +56,7 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 position = Vector2(-1, 6)
 shape = SubResource("CircleShape2D_pocej")
 
-[node name="RopeSling" type="Node2D" parent="MyController"]
+[node name="RopeSling" type="Node2D" parent="MyController" node_paths=PackedStringArray("attached")]
 unique_name_in_owner = true
 script = ExtResource("2_sut83")
 bounce = 1.0
@@ -64,21 +69,28 @@ gravity = Vector2(0, 0)
 tightness = 10
 damping = 0.99
 end_strength = 0.98
-color = Color(0.305882, 0.709804, 0.466667, 1)
 width = 10.0
+attached = NodePath("../AttachedBody")
+attached_strength = 0.1
 
-[node name="AttachedBody" type="RigidBody2D" parent="MyController/RopeSling"]
+[node name="AttachedBody" type="RigidBody2D" parent="MyController"]
 unique_name_in_owner = true
-position = Vector2(0, 580)
-collision_mask = 0
+top_level = true
+position = Vector2(4, 472)
 physics_material_override = SubResource("PhysicsMaterial_x8h5h")
-freeze = true
+gravity_scale = 0.0
+lock_rotation = true
 freeze_mode = 1
+linear_damp = 0.5
+angular_damp = 0.5
+script = ExtResource("3_nedgp")
+follow_rope_speed = 10.0
+drag_factor = 40.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/RopeSling/AttachedBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/AttachedBody"]
 shape = SubResource("CircleShape2D_ndur0")
 
-[node name="Polygon2D" type="Polygon2D" parent="MyController/RopeSling/AttachedBody"]
+[node name="Polygon2D" type="Polygon2D" parent="MyController/AttachedBody"]
 color = Color(0.3053, 0.71, 0.46718, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 
@@ -158,14 +170,6 @@ alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "Rope Controls"
-
-[node name="Detach" type="Button" parent="world/Menu/VBoxContainer/VBoxRope"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 50
-text = "Detach"
-alignment = 0
 
 [node name="Collisions" type="Button" parent="world/Menu/VBoxContainer/VBoxRope"]
 unique_name_in_owner = true

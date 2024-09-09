@@ -4,7 +4,6 @@ class_name Menu
 var off_screen := -5000
 var tween: Tween = null
 @onready var attached_anim_body: PhysicsBody2D = %AttachedBody
-@onready var detach_btn: Button = %Detach
 @onready var collisions_btn: Button = %Collisions
 @onready var anim_holder: Node2D = %AnimHolder
 @onready var rope_sling: CharacterRope = %RopeSling
@@ -12,12 +11,11 @@ var tween: Tween = null
 @onready var v_box_player: VBoxContainer = %VBoxPlayer
 @onready var my_controller: SpaceController = %MyController
 
-var mask := 0.0
+var mask := 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	position.x += off_screen
-	detach_btn.connect("pressed", detach)
 	collisions_btn.connect("pressed", collision)
 	mask = rope_sling.mask
 	for c in v_box_rope.get_children():
@@ -36,18 +34,8 @@ func _ready() -> void:
 func _kill() -> void:
 	tween = null
 
-func _on_spinbox_changed(value: float, name: StringName, object: Node2D) -> void:
-	object[name] = value
-
-func detach() -> void:
-	if detach_btn.text == "Detach":
-		rope_sling.remove_child(attached_anim_body)
-		anim_holder.add_child(attached_anim_body)
-		detach_btn.text = "Reattach"
-	else:
-		anim_holder.remove_child(attached_anim_body)
-		rope_sling.add_child(attached_anim_body)
-		detach_btn.text = "Detach"
+func _on_spinbox_changed(value: float, nm: StringName, object: Node2D) -> void:
+	object[nm] = value
 
 func collision() -> void:
 	print("1")
