@@ -22,12 +22,20 @@ var _calculated_drag := Vector2.ZERO
 
 func _ready() -> void:
 	_thrust_vector = Vector2(thrust, thrust)
-	rope_sling.connect("rope_stretched", _on_stretch)
+	rope_sling.connect("rope_stretched", _on_stretch) # TODO: eventually this won't be unique
+	for c in get_children():
+		if c is MyRope:
+			c.connect("rope_stretched", _on_stretch)
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("jump"):
+		rope_sling.attached = null if rope_sling.attached else attached_body
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
-	var X_DIR = Input.get_axis("move_left", "move_right")
-	var Y_DIR = Input.get_axis("move_up", "move_down")
+	var X_DIR := Input.get_axis("move_left", "move_right")
+	var Y_DIR := Input.get_axis("move_up", "move_down")
 	state.apply_central_force(_calculated_drag + _thrust_vector * Vector2(X_DIR, Y_DIR).normalized())
+	_calculated_drag = Vector2.ZERO
 
 func _on_stretch(stretch_length: float) -> void:
-	_calculated_drag = drag_factor * stretch_length * rope_sling.start_direction
+	_calculated_drag += drag_factor * stretch_length * rope_sling.start_direction
