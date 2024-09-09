@@ -11,7 +11,7 @@ friction = 0.0
 bounce = 0.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
-radius = 16.0312
+radius = 99.0
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x8h5h"]
 
@@ -42,11 +42,13 @@ bounce_ratio = 0.001
 metadata/_edit_group_ = true
 
 [node name="Polygon2D2" type="Polygon2D" parent="MyController"]
-scale = Vector2(0.217391, 0.217391)
-color = Color(0.700056, 0.483817, 0.997643, 1)
+position = Vector2(-1.13233, 4.5293)
+scale = Vector2(1.34972, 1.34972)
+color = Color(0.346342, 0.183389, 0.0283619, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MyController"]
+position = Vector2(-1, 6)
 shape = SubResource("CircleShape2D_pocej")
 
 [node name="RopeSling" type="Node2D" parent="MyController"]
@@ -62,19 +64,21 @@ gravity = Vector2(0, 0)
 tightness = 10
 damping = 0.99
 end_strength = 0.98
+color = Color(0.305882, 0.709804, 0.466667, 1)
 width = 10.0
 
-[node name="AttachedAnimBody" type="AnimatableBody2D" parent="MyController/RopeSling"]
+[node name="AttachedBody" type="RigidBody2D" parent="MyController/RopeSling"]
 unique_name_in_owner = true
 position = Vector2(0, 580)
 collision_mask = 0
 physics_material_override = SubResource("PhysicsMaterial_x8h5h")
-sync_to_physics = false
+freeze = true
+freeze_mode = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/RopeSling/AttachedAnimBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController/RopeSling/AttachedBody"]
 shape = SubResource("CircleShape2D_ndur0")
 
-[node name="Polygon2D" type="Polygon2D" parent="MyController/RopeSling/AttachedAnimBody"]
+[node name="Polygon2D" type="Polygon2D" parent="MyController/RopeSling/AttachedBody"]
 color = Color(0.3053, 0.71, 0.46718, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 

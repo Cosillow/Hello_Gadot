@@ -14,7 +14,7 @@ extends RigidBody2D
 @export var bounce_ratio: float = 0.1
 
 @onready var rope_sling: MyRope = %RopeSling
-@onready var attached_body: AnimatableBody2D = %AttachedAnimBody
+@onready var attached_body: PhysicsBody2D = %AttachedBody
 
 var _thrust_vector := Vector2.ZERO
 
