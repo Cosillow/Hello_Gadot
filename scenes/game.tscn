@@ -20,14 +20,12 @@ offset = Vector2(0, -87)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
-[node name="MyRope" type="Node2D" parent="Player" node_paths=PackedStringArray("attached")]
-z_index = 99
-script = ExtResource("2_mkysp")
-attached = NodePath("../../SwingingPlatform/TopPlatform/MyRope/Platform")
-attached_strength = 0.01
-
 [node name="Platform" parent="." instance=ExtResource("1_8hn6c")]
 position = Vector2(569, -238)
+
+[node name="MyRope" type="Node2D" parent="Platform"]
+script = ExtResource("2_mkysp")
+gravity = Vector2(4, -10)
 
 [node name="Platform2" parent="." instance=ExtResource("1_8hn6c")]
 position = Vector2(149, -41)
@@ -49,11 +47,8 @@ position = Vector2(207, -408)
 distance = 100.0
 time = 4.0
 
-[node name="MyRope" parent="SwingingPlatform/TopPlatform" index="3"]
-attached_strength = null
-
 [node name="Platform" parent="SwingingPlatform/TopPlatform/MyRope" index="1"]
-position = Vector2(0, 180.009)
+position = Vector2(0.000137329, 180.009)
 
 [node name="SwingingPlatform2" parent="." instance=ExtResource("4_8el7i")]
 position = Vector2(-239, -273)

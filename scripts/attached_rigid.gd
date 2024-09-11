@@ -11,6 +11,6 @@ func _ready() -> void:
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	state.apply_central_force(_calculated_drag)
 	
-func _on_stretch(stretch_length: float) -> void:
-	_calculated_drag = drag_factor * stretch_length * -rope_sling.endDirection
+func _on_stretch(stretch_length: float, start_direction: Vector2, end_direction: Vector2) -> void:
+	_calculated_drag = drag_factor * stretch_length * -end_direction
 	

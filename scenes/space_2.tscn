@@ -11,7 +11,7 @@ friction = 0.0
 bounce = 0.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
-radius = 99.0
+radius = 100.0
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tkwvr"]
 
@@ -50,16 +50,6 @@ shape = SubResource("CircleShape2D_pocej")
 
 [node name="RopeSling" parent="MyController" instance=ExtResource("2_finyo")]
 unique_name_in_owner = true
-rope_length = 880.0
-
-[node name="RopeSling2" parent="MyController" instance=ExtResource("2_finyo")]
-rope_length = 900.0
-
-[node name="RopeSling3" parent="MyController" instance=ExtResource("2_finyo")]
-rope_length = 1000.0
-
-[node name="RopeSling4" parent="MyController" instance=ExtResource("2_finyo")]
-rope_length = 800.0
 
 [node name="BallSpawner" type="Node2D" parent="."]
 unique_name_in_owner = true

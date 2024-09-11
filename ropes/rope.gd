@@ -85,14 +85,7 @@ func _ready() -> void:
 	add_child(_line_2d, false, InternalMode.INTERNAL_MODE_FRONT)
 	_resize_arrays()
 	
-	# init position
-	position = Vector2.ZERO
-	for i in range(segment_number):
-		_pos[i] = global_position + Vector2(0, _segment_length *i)
-		_pos_prev[i] = global_position + Vector2(0, _segment_length *i)
-	if attached:
-		endpoint = attached.global_position + offset
-	_fix_children_to_endpoint()
+	call_deferred("_init_position")
 
 func _process(_delta: float) -> void:
 	assert(_is_attached_processed_first())
@@ -119,7 +112,7 @@ func _physics_process(delta: float) -> void:
 		#endpoint = attached.global_position + offset
 	
 	var actual_length := _pos[0].distance_to(endpoint)
-	rope_stretched.emit(maxf(actual_length - rope_length, 0))
+	rope_stretched.emit(maxf(actual_length - rope_length, 0), start_direction, endDirection)
 
 func _notification(what):
 	match what:
@@ -129,6 +122,20 @@ func _notification(what):
 func apply_endpoint_impulse(velocity: Vector2) -> void:
 	#_pos_prev[-1] = endpoint - (velocity * damping)
 	_pos_prev[-1] = _pos_prev[-1] - (velocity * damping)
+
+func _init_position() -> void:
+	## the rope will be start in the avg direction of gravity and to where attached
+	## actual length will never exceed beyond attached
+	position = Vector2.ZERO
+	var dir := (gravity + Vector2.ZERO if not attached else global_position.direction_to(attached.global_position)).normalized() 
+	var dist_between := _segment_length if not attached else minf(_segment_length, attached.global_position.distance_to(global_position) / segment_number)
+	for i in range(segment_number):
+		var pos := offset + global_position + (dir * dist_between * i)
+		_pos[i] = pos
+		_pos_prev[i] = pos
+	if attached:
+		endpoint = attached.global_position + offset
+	_fix_children_to_endpoint()
 
 func _apply_impulse(velocity: Vector2, point: int) -> void:
 	_pos_prev[point] = _pos_prev[point] - (velocity)

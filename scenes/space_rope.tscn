@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://bq3ymgfjdenym"]
+
+[ext_resource type="Script" path="res://ropes/rope.gd" id="1_u5ycv"]
+
+[node name="SpaceRope" type="Node2D"]
+script = ExtResource("1_u5ycv")
+rope_length = 500.0
+segment_number = 30
+gravity = Vector2(0, 0)
+tightness = 10
+damping = 0.99
+end_strength = 0.98
+color = Color(0.63, 0.63, 0.63, 1)
+width = 10.0
