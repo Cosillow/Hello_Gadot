@@ -15,7 +15,6 @@ const ROPE_SLING = preload("res://scenes/rope_sling.tscn")
 		thrust = val
 		_thrust_vector = Vector2(val, val)
 @export var bounce_ratio: float = 0.1
-@export var drag_factor: float = 100
 
 @onready var rope_sling: RopeSling = %RopeSling
 
@@ -24,9 +23,6 @@ var _calculated_drag := Vector2.ZERO
 
 func _ready() -> void:
 	_thrust_vector = Vector2(thrust, thrust)
-	for c in get_children():
-		if c is MyRope:
-			c.connect("rope_stretched", _on_stretch)
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	var X_DIR := Input.get_axis("move_left", "move_right")
@@ -44,16 +40,11 @@ func _input(event: InputEvent) -> void:
 		#call_deferred("_shoot_rope")
 		_shoot_rope()
 
-func _on_stretch(stretch_length: float, start_direction: Vector2, end_direction: Vector2) -> void:
-	_calculated_drag += drag_factor * stretch_length * start_direction
-
 func _shoot_rope() -> void:
 	var dir := (get_global_mouse_position() - position).normalized()
 	var sling := ROPE_SLING.instantiate() as RopeSling
 	
 	sling.init_glob_body_pos = global_position + dir * 200
-	#sling.global_position = global_position
 	add_child(sling)
-	sling.shoot(dir * 2000 + linear_velocity)
-	sling.attachment_rope.connect("rope_stretched", _on_stretch)
+	sling.shoot(dir * 2000 + linear_velocity, self)
 	

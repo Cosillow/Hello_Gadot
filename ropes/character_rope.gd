@@ -3,7 +3,6 @@ class_name CharacterRope
 extends CollisionShapeRope
 
 @export var bounce: float = .5
-#@export var mass: float = 1
 @export_range(1, 20, 1, "or_greater") var body_affect_factor: float = 1
 
 @export_flags_2d_physics var layer := 1 :
@@ -92,7 +91,7 @@ func _handle_collision(collision: KinematicCollision2D, delta: float) -> void:
 	normal = normal if normal.dot(collision.get_normal()) >= 0 else normal * -1
 	
 	if collider is RigidBody2D:
-		var impulse_magnitude: float= relative_velocity.length() * collider.mass
+		var impulse_magnitude: float = relative_velocity.length() * collider.mass
 		#print("%s relative: %v, collider: %v, segment: %v" % [collider.name, relative_velocity, collider_velocity, segment_velocity])
 		#_draw_normal = normal
 		#_normal_point = segment_start - global_position
