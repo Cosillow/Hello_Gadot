@@ -29,4 +29,3 @@ damping = 0.99
 end_strength = 0.98
 color = Color(0.487387, 0.689304, 0.26823, 1)
 width = 10.0
-attached_strength = 0.1

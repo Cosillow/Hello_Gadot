@@ -1,5 +1,3 @@
-@tool
-
 class_name RopeSling
 extends Node2D
 
@@ -16,9 +14,17 @@ func _ready() -> void:
 			count += 1
 			attached_body = c as RigidBody2D
 	assert(count == 1)
+	var parent := get_parent() as RigidBody2D
+	assert(parent)
+	rope_connection.start_body = parent
+	rope_connection.end_body = attached_body
+	
 	remove_child(attached_body)
 	rope_connection.add_child(attached_body)
+	
 	attached_body.global_position = init_glob_body_pos
+	
+	attachment_rope.attached = attached_body
 	
 
 func _notification(what: int) -> void:
@@ -29,6 +35,9 @@ func _notification(what: int) -> void:
 func _get_configuration_warnings():
 	var warnings = []
 	
+	if get_parent() is not RigidBody2D:
+		warnings.append("Parent must be type `RigidBody2d`")
+	
 	for c in get_children():
 		if c is not RigidBody2D:
 			warnings.append("You must add a child of type `RigidBody2d`")
@@ -36,8 +45,7 @@ func _get_configuration_warnings():
 	
 	return warnings
 
-func shoot(impulse: Vector2, parent: RigidBody2D=null) -> void:
+func shoot(impulse: Vector2) -> void:
 	attached_body.apply_impulse(impulse)
-	rope_connection.start_body = parent
 	rope_connection.end_body = attached_body
 	attachment_rope.attached = attached_body

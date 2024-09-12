@@ -37,9 +37,8 @@ signal rope_stretched(length: float)
 		attached = val
 		update_configuration_warnings()
 		assert(_is_attached_processed_first())
-@export var attached_strength: float = 1.0
 
-@onready var _line_2d := Line2D.new()
+var _line_2d := Line2D.new()
 
 var _pos: PackedVector2Array
 var _pos_prev: PackedVector2Array
@@ -62,7 +61,16 @@ var start_direction: Vector2 :
 		return _pos[0].direction_to(_pos[1])
 var finalPosition: PackedVector2Array :
 	get:
-		return _pos * Transform2D().translated(_translation)
+		# Get the parent's global transform (including rotation and scale)
+		var parent_transform := (get_parent() as Node2D).global_transform
+		
+		# Create a transformation with translation and parent's rotation
+		var transform := Transform2D().translated(_translation) * Transform2D().rotated(parent_transform.get_rotation())
+		
+		# Apply the transformation to the positions
+		return _pos * transform
+		
+		#return _pos * Transform2D().translated(_translation)
 
 func _get_configuration_warnings():
 	var warnings = []
@@ -96,6 +104,7 @@ func _process(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	# set start of rope
 	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
+	self.rotation = (get_parent() as Node2D).rotation
 	_pos[0] = global_position
 	_pos_prev[0] = global_position
 	
@@ -103,10 +112,10 @@ func _physics_process(delta: float) -> void:
 	
 	# allow attached to affect rope before constraints
 	if attached:
-		endpoint = endpoint.lerp(attached.global_position + offset, attached_strength) 
+		endpoint = attached.global_position + offset
 	
 	_constrain()
-	
+	 
 	# visually reattach endpoint to node
 	#if attached: #TODO: I think constrain check may make this redundant
 		#endpoint = attached.global_position + offset

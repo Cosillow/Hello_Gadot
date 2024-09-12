@@ -40,5 +40,5 @@ func _shoot_rope() -> void:
 	sling.init_glob_body_pos = global_position + dir * 200
 	sling.add_child(planet)
 	add_child(sling)
-	sling.shoot(dir * 800, self) #+ linear_velocity
+	sling.shoot(dir * 800) #+ linear_velocity
 	

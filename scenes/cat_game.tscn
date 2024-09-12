@@ -1,8 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://crk5itkoap4a7"]
+[gd_scene load_steps=7 format=3 uid="uid://crk5itkoap4a7"]
 
 [ext_resource type="Script" path="res://scripts/space_controller.gd" id="1_8354n"]
 [ext_resource type="PackedScene" uid="uid://cnxgpjtbdx04j" path="res://scenes/rope_sling.tscn" id="1_lq85c"]
+[ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="3_3ud0c"]
 [ext_resource type="PackedScene" uid="uid://dacvoc0g37u2r" path="res://scenes/planet.tscn" id="3_ykvw6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6v42q"]
+size = Vector2(35, 1000)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_xefw7"]
 
 [node name="CatGame" type="Node2D"]
 
@@ -10,6 +16,71 @@
 script = ExtResource("1_8354n")
 thrust = 10000.0
 
-[node name="RopeSling" parent="." instance=ExtResource("1_lq85c")]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpaceController"]
+shape = SubResource("RectangleShape2D_6v42q")
 
-[node name="Planet" parent="RopeSling" instance=ExtResource("3_ykvw6")]
+[node name="Polygon2D" type="Polygon2D" parent="SpaceController"]
+scale = Vector2(0.34, 1)
+color = Color(0.28, 0.23534, 0.1876, 1)
+polygon = PackedVector2Array(-50, 500, -50, 5.62048, -50, -500, 50, -500, 50, 500)
+
+[node name="RopeSling" parent="SpaceController" instance=ExtResource("1_lq85c")]
+
+[node name="AttachmentRope" parent="SpaceController/RopeSling" index="1"]
+offset = Vector2(0, 400)
+
+[node name="Planet" parent="SpaceController/RopeSling" instance=ExtResource("3_ykvw6")]
+
+[node name="world" type="Node2D" parent="."]
+
+[node name="WorldBoundry" type="StaticBody2D" parent="world"]
+position = Vector2(1740, 0)
+rotation = -1.57079
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry"]
+shape = SubResource("WorldBoundaryShape2D_xefw7")
+
+[node name="WorldBoundry2" type="StaticBody2D" parent="world"]
+position = Vector2(-2097, 0)
+rotation = 1.57079
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry2"]
+shape = SubResource("WorldBoundaryShape2D_xefw7")
+
+[node name="WorldBoundry3" type="StaticBody2D" parent="world"]
+position = Vector2(-103, -1362)
+rotation = 3.14159
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry3"]
+shape = SubResource("WorldBoundaryShape2D_xefw7")
+
+[node name="WorldBoundry4" type="StaticBody2D" parent="world"]
+position = Vector2(-103, 831)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry4"]
+shape = SubResource("WorldBoundaryShape2D_xefw7")
+
+[node name="Parallax2D" type="Parallax2D" parent="world"]
+visible = false
+z_index = -1
+repeat_size = Vector2(1000, 0)
+repeat_times = 4
+
+[node name="Sprite2D3" type="Sprite2D" parent="world/Parallax2D"]
+self_modulate = Color(0.572549, 0, 1, 0.427451)
+position = Vector2(466.74, -333.32)
+scale = Vector2(2.91, 52.12)
+texture = ExtResource("3_3ud0c")
+
+[node name="Sprite2D4" type="Sprite2D" parent="world/Parallax2D"]
+self_modulate = Color(0.160784, 1, 1, 0.376471)
+position = Vector2(4.23999, -333.32)
+scale = Vector2(2.91, 52.12)
+texture = ExtResource("3_3ud0c")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-163, -268)
+zoom = Vector2(0.28, 0.28)
+position_smoothing_enabled = true
+
+[editable path="SpaceController/RopeSling"]
