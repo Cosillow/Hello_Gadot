@@ -34,7 +34,6 @@ max_contacts_reported = 5
 linear_damp = 0.4
 script = ExtResource("2_tuc74")
 thrust = 5000.0
-bounce_ratio = 0.001
 metadata/_edit_group_ = true
 
 [node name="Polygon2D2" type="Polygon2D" parent="MyController"]
