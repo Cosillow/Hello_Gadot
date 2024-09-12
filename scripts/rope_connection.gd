@@ -4,24 +4,41 @@ extends Node
 # TODO: push warnings for without a rope
 
 @export var rope: MyRope = null
-@export var start_body: RigidBody2D = null
-@export var end_body: RigidBody2D = null
-@export var drag_factor_start: float = 6
-@export var drag_factor_end: float = 41
+@export var start_body: RigidBody2D = null :
+	set(val):
+		start_body = val
+		if val:
+			_start_damp = val.linear_damp
+@export var end_body: RigidBody2D = null :
+	set(val):
+		end_body = val
+		if val:
+			_end_damp = val.linear_damp
 @export var elasticity := 5.0
+@export var damping := 1.0
+
+var _start_damp := 1.0
+var _end_damp := 1.0
 
 func _ready() -> void:
 	rope.connect("rope_stretched", _on_stretch)
+	if start_body:
+		_start_damp = start_body.linear_damp
+	if end_body:
+		_end_damp = end_body.linear_damp
 
 func _on_stretch(stretch_length: float, start_direction: Vector2, end_direction: Vector2) -> void:
-	#var tension_force := elasticity * stretch_length
-	if not stretch_length or not start_body or not end_body:
+	if not start_body or not end_body:
 		return
-		
-	var force_start := drag_factor_start * stretch_length
-	#var force_start := start_body.angular_velocity * stretch_length
-	start_body.apply_central_force(force_start * end_direction)
+	if not stretch_length:
+		start_body.linear_damp = _start_damp
+		end_body.linear_damp = _end_damp
+		return
 	
-	var force_end := drag_factor_end * stretch_length
-	#var force_end := end_body.angular_velocity * stretch_length
-	end_body.apply_central_force(force_end * -start_direction)
+	var extra_damping := (stretch_length / rope.rope_length) * damping
+	start_body.linear_damp = _start_damp + extra_damping
+	end_body.linear_damp = _end_damp + extra_damping
+	
+	var force := stretch_length * elasticity 
+	start_body.apply_central_force(force * end_direction)
+	end_body.apply_central_force(force * -start_direction)

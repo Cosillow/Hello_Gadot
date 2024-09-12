@@ -19,6 +19,8 @@ unique_name_in_owner = true
 script = ExtResource("2_tenbj")
 rope = NodePath("../AttachmentRope")
 end_body = NodePath("../AttachmentRope/Node/AttachedBody")
+elasticity = 50.0
+damping = 0.2
 
 [node name="AttachmentRope" type="Node2D" parent="." node_paths=PackedStringArray("attached")]
 unique_name_in_owner = true
@@ -43,6 +45,7 @@ attached_strength = 0.1
 [node name="AttachedBody" type="RigidBody2D" parent="AttachmentRope/Node"]
 unique_name_in_owner = true
 collision_mask = 5
+mass = 0.3
 physics_material_override = SubResource("PhysicsMaterial_x8h5h")
 gravity_scale = 0.0
 lock_rotation = true
