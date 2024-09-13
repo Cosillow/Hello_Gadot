@@ -1,11 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnxgpjtbdx04j"]
+[gd_scene load_steps=5 format=3 uid="uid://cnxgpjtbdx04j"]
 
 [ext_resource type="Script" path="res://scripts/rope_sling.gd" id="1_cnc1a"]
 [ext_resource type="Script" path="res://ropes/character_rope.gd" id="1_qparc"]
+[ext_resource type="Script" path="res://scripts/pid_controller.gd" id="2_ape6j"]
 [ext_resource type="Script" path="res://scripts/rope_connection.gd" id="2_tenbj"]
 
 [node name="RopeSling" type="Node2D"]
 script = ExtResource("1_cnc1a")
+
+[node name="PIDController" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_ape6j")
+proportional_gain = 2.0
+integral_gain = 1.0
+derivative_gain = 2.0
+output_max = 0.0
+integral_saturation = 1.0
 
 [node name="RopeConnection" type="Node" parent="." node_paths=PackedStringArray("rope")]
 unique_name_in_owner = true

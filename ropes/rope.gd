@@ -65,7 +65,10 @@ var finalPosition: PackedVector2Array :
 		var parent_transform := (get_parent() as Node2D).global_transform
 		
 		# Create a transformation with translation and parent's rotation
-		var transform := Transform2D().translated(_translation) * Transform2D().rotated(parent_transform.get_rotation())
+		var transform := Transform2D().translated(global_position) * Transform2D().rotated(parent_transform.get_rotation()) * Transform2D().translated(parent_transform.basis_xform(offset)) #* Transform2D().translated(offset)
+		
+		#global_transform.basis_xform
+		#var transform := Transform2D(parent_transform.get_rotation(), _translation)
 		
 		# Apply the transformation to the positions
 		return _pos * transform
@@ -105,7 +108,7 @@ func _physics_process(delta: float) -> void:
 	# set start of rope
 	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
 	self.rotation = (get_parent() as Node2D).rotation
-	_pos[0] = global_position
+	_pos[0] = global_position 
 	_pos_prev[0] = global_position
 	
 	_verlet_integrate_points(delta)
@@ -121,7 +124,7 @@ func _physics_process(delta: float) -> void:
 		#endpoint = attached.global_position + offset
 	
 	var actual_length := _pos[0].distance_to(endpoint)
-	rope_stretched.emit(maxf(actual_length - rope_length, 0), start_direction, endDirection)
+	rope_stretched.emit(maxf(actual_length - rope_length, 0), start_direction, endDirection, delta)
 
 func _notification(what):
 	match what:

@@ -11,9 +11,8 @@ radius = 16.0312
 
 [node name="ControlledBody12" type="RigidBody2D" parent="."]
 position = Vector2(-97, 41)
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -31,9 +30,8 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody13" type="RigidBody2D" parent="."]
 position = Vector2(8, 58)
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -51,9 +49,8 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody14" type="RigidBody2D" parent="."]
 position = Vector2(16, -141)
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -71,9 +68,8 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody15" type="RigidBody2D" parent="."]
 position = Vector2(-118, -19)
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -91,9 +87,8 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody16" type="RigidBody2D" parent="."]
 position = Vector2(81, 7)
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -111,9 +106,8 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody17" type="RigidBody2D" parent="."]
 position = Vector2(-65, 92)
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -131,9 +125,8 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody18" type="RigidBody2D" parent="."]
 position = Vector2(71, 85)
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -151,9 +144,8 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody19" type="RigidBody2D" parent="."]
 position = Vector2(94, -80)
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -171,9 +163,8 @@ polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65,
 
 [node name="ControlledBody20" type="RigidBody2D" parent="."]
 position = Vector2(-60, -103)
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true
@@ -190,9 +181,8 @@ color = Color(0.84, 0.3444, 0.3857, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 
 [node name="ControlledBody11" type="RigidBody2D" parent="."]
-collision_layer = 4
 collision_mask = 7
-mass = 5.0
+mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_skp3n")
 gravity_scale = 0.0
 lock_rotation = true

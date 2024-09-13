@@ -8,10 +8,11 @@ bounce = 0.3
 radius = 34.0
 
 [node name="Planet" type="RigidBody2D"]
-collision_mask = 5
+collision_mask = 7
 mass = 0.3
 physics_material_override = SubResource("PhysicsMaterial_gtrni")
 gravity_scale = 0.0
+can_sleep = false
 lock_rotation = true
 freeze_mode = 1
 linear_damp = 0.5

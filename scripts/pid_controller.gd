@@ -41,7 +41,7 @@ func update(current_value: float, target_value: float, delta: float) -> float:
 	var P := proportional_gain * error
 
 	# calculate I term
-	integration_stored = clamp(integration_stored + (error * delta), -integral_saturation, integral_saturation)
+	integration_stored = clampf(integration_stored + (error * delta), -integral_saturation, integral_saturation)
 	var I := integral_gain * integration_stored
 
 	# calculate both D terms
@@ -66,7 +66,7 @@ func update(current_value: float, target_value: float, delta: float) -> float:
 
 	var result := P + I + D
 
-	return clamp(result, output_min, output_max)
+	return clampf(result, output_min, output_max)
 
 
 func angle_difference(a: float, b: float) -> float:
@@ -84,7 +84,7 @@ func update_angle(current_angle: float, target_angle: float, delta: float) -> fl
 	var P := proportional_gain * error
 
 	# calculate I term
-	integration_stored = clamp(integration_stored + (error * delta), -integral_saturation, integral_saturation)
+	integration_stored = clampf(integration_stored + (error * delta), -integral_saturation, integral_saturation)
 	var I := integral_gain * integration_stored
 
 	# calculate both D terms
@@ -109,4 +109,4 @@ func update_angle(current_angle: float, target_angle: float, delta: float) -> fl
 
 	var result := P + I + D
 
-	return clamp(result, output_min, output_max)
+	return clampf(result, output_min, output_max)
