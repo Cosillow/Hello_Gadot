@@ -45,5 +45,5 @@ func _on_stretch(stretch_length: float, start_direction: Vector2, end_direction:
 	
 	#var force := stretch_length * elasticity 
 	var force := 4000 * -pid_controller.update(stretch_length, 0, delta)
-	start_body.apply_central_impulse(force * end_direction * delta)
-	end_body.apply_central_impulse(force * -start_direction * delta)
+	start_body.apply_impulse(force * start_direction * delta, start_body.global_transform.basis_xform(rope.offset))
+	end_body.apply_central_impulse(force * -end_direction * delta)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://crk5itkoap4a7"]
 
-[ext_resource type="Script" path="res://scripts/space_controller.gd" id="1_8354n"]
+[ext_resource type="Script" path="res://scripts/stick.gd" id="1_j8in3"]
 [ext_resource type="PackedScene" uid="uid://cnxgpjtbdx04j" path="res://scenes/rope_sling.tscn" id="1_lq85c"]
 [ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="3_3ud0c"]
 [ext_resource type="PackedScene" uid="uid://dacvoc0g37u2r" path="res://scenes/planet.tscn" id="3_ykvw6"]
@@ -22,13 +22,14 @@ bounce = 0.62
 
 [node name="SpaceController" type="RigidBody2D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_pb1sp")
-script = ExtResource("1_8354n")
-thrust = 5000.0
+script = ExtResource("1_j8in3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpaceController"]
+position = Vector2(0, 484)
 shape = SubResource("RectangleShape2D_6v42q")
 
 [node name="Polygon2D" type="Polygon2D" parent="SpaceController"]
+position = Vector2(0, 484)
 scale = Vector2(0.34, 1)
 color = Color(0.28, 0.23534, 0.1876, 1)
 polygon = PackedVector2Array(-50, 500, -50, 5.62048, -50, -500, 50, -500, 50, 500)
@@ -36,7 +37,8 @@ polygon = PackedVector2Array(-50, 500, -50, 5.62048, -50, -500, 50, -500, 50, 50
 [node name="RopeSling" parent="SpaceController" instance=ExtResource("1_lq85c")]
 
 [node name="AttachmentRope" parent="SpaceController/RopeSling" index="2"]
-offset = Vector2(0, 300)
+position = Vector2(0, 200)
+offset = Vector2(0, 200)
 
 [node name="Planet" parent="SpaceController/RopeSling" instance=ExtResource("3_ykvw6")]
 mass = 1.0

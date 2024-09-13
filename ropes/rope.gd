@@ -44,7 +44,7 @@ var _pos: PackedVector2Array
 var _pos_prev: PackedVector2Array
 var _translation: Vector2 :
 	get:
-		return global_position + offset
+		return global_position #+ offset
 var _segment_length: float = rope_length / segment_number
 
 var endpoint : Vector2 :
@@ -65,7 +65,7 @@ var finalPosition: PackedVector2Array :
 		var parent_transform := (get_parent() as Node2D).global_transform
 		
 		# Create a transformation with translation and parent's rotation
-		var transform := Transform2D().translated(global_position) * Transform2D().rotated(parent_transform.get_rotation()) * Transform2D().translated(parent_transform.basis_xform(offset)) #* Transform2D().translated(offset)
+		var transform := Transform2D().translated(global_position) * Transform2D().rotated(parent_transform.get_rotation()) #* Transform2D().translated(parent_transform.basis_xform(offset)) #* Transform2D().translated(offset)
 		
 		#global_transform.basis_xform
 		#var transform := Transform2D(parent_transform.get_rotation(), _translation)
@@ -106,7 +106,7 @@ func _process(_delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	# set start of rope
-	self.position = Vector2.ZERO # THIS WOKRS... but why does local pos change when new parent??
+	self.position = offset # THIS WOKRS... but why does local pos change when new parent??
 	self.rotation = (get_parent() as Node2D).rotation
 	_pos[0] = global_position 
 	_pos_prev[0] = global_position
@@ -115,7 +115,7 @@ func _physics_process(delta: float) -> void:
 	
 	# allow attached to affect rope before constraints
 	if attached:
-		endpoint = attached.global_position + offset
+		endpoint = attached.global_position #+ offset
 	
 	_constrain()
 	 
@@ -138,15 +138,15 @@ func apply_endpoint_impulse(velocity: Vector2) -> void:
 func _init_position() -> void:
 	## the rope will be start in the avg direction of gravity and to where attached
 	## actual length will never exceed beyond attached
-	position = Vector2.ZERO
+	position = offset
 	var dir := (gravity + Vector2.ZERO if not attached else global_position.direction_to(attached.global_position)).normalized() 
 	var dist_between := _segment_length if not attached else minf(_segment_length, attached.global_position.distance_to(global_position) / segment_number)
 	for i in range(segment_number):
-		var pos := offset + global_position + (dir * dist_between * i)
+		var pos := global_position + (dir * dist_between * i)
 		_pos[i] = pos
 		_pos_prev[i] = pos
 	if attached:
-		endpoint = attached.global_position + offset
+		endpoint = attached.global_position #+ offset
 	_fix_children_to_endpoint()
 
 func _apply_impulse(velocity: Vector2, point: int) -> void:
