@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://crk5itkoap4a7"]
+[gd_scene load_steps=11 format=3 uid="uid://crk5itkoap4a7"]
 
 [ext_resource type="Script" path="res://scripts/stick.gd" id="1_j8in3"]
 [ext_resource type="PackedScene" uid="uid://cnxgpjtbdx04j" path="res://scenes/rope_sling.tscn" id="1_lq85c"]
@@ -20,8 +20,6 @@ size = Vector2(35, 1000)
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_qdwgg"]
 friction = 0.0
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_xefw7"]
-
 [node name="CatGame" type="Node2D"]
 
 [node name="WaterArea" type="Area2D" parent="."]
@@ -29,6 +27,7 @@ unique_name_in_owner = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WaterArea"]
 shape = SubResource("WorldBoundaryShape2D_di2ty")
+debug_color = Color(0.105482, 0.237974, 0.999996, 0.419608)
 
 [node name="Stick" type="RigidBody2D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_pb1sp")
@@ -36,7 +35,7 @@ script = ExtResource("1_j8in3")
 steady_speed = 1e+06
 pull_up_impulse = 2000.0
 torque_impulse = 1.3e+06
-water_angle = 130.0
+water_angle = 90.0
 thrust = 5000.0
 
 [node name="PIDStickController" type="Node" parent="Stick"]
@@ -66,6 +65,7 @@ tension_speed = 8000
 
 [node name="AttachmentRope" parent="Stick/RopeSling" index="2"]
 position = Vector2(10, -784)
+rope_length = 650.0
 offset = Vector2(10, -784)
 gravity = Vector2(0, 10)
 damping = 0.9
@@ -83,26 +83,6 @@ script = ExtResource("5_3xaxf")
 
 [node name="WorldBoundry" type="StaticBody2D" parent="world"]
 unique_name_in_owner = true
-position = Vector2(1740, 0)
-rotation = -1.57079
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry"]
-shape = SubResource("WorldBoundaryShape2D_xefw7")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="world/WorldBoundry"]
-position = Vector2(-0.0240748, -3837)
-rotation = 3.14158
-shape = SubResource("WorldBoundaryShape2D_xefw7")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="world/WorldBoundry"]
-position = Vector2(1361.99, -1843.01)
-rotation = -1.57081
-shape = SubResource("WorldBoundaryShape2D_xefw7")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="world/WorldBoundry"]
-position = Vector2(-831.012, -1842.99)
-rotation = 1.57079
-shape = SubResource("WorldBoundaryShape2D_xefw7")
 
 [node name="Parallax2D" type="Parallax2D" parent="world"]
 visible = false
@@ -124,8 +104,7 @@ texture = ExtResource("3_3ud0c")
 
 [node name="BorderedCam" type="Camera2D" parent="world"]
 unique_name_in_owner = true
-position = Vector2(-163, -268)
-zoom = Vector2(0.28, 0.28)
+zoom = Vector2(0.2, 0.2)
 
 [connection signal="body_entered" from="WaterArea" to="Stick" method="_on_water_area_body_entered"]
 [connection signal="body_exited" from="WaterArea" to="Stick" method="_on_water_area_body_exited"]
