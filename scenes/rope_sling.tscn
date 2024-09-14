@@ -13,7 +13,6 @@ unique_name_in_owner = true
 script = ExtResource("2_ape6j")
 proportional_gain = 2.0
 integral_gain = 1.0
-derivative_gain = 2.0
 output_max = 0.0
 integral_saturation = 1.0
 
@@ -21,8 +20,6 @@ integral_saturation = 1.0
 unique_name_in_owner = true
 script = ExtResource("2_tenbj")
 rope = NodePath("../AttachmentRope")
-elasticity = 50.0
-damping = 0.2
 
 [node name="AttachmentRope" type="Node2D" parent="."]
 unique_name_in_owner = true

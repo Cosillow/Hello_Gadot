@@ -14,8 +14,9 @@ extends Node
 		end_body = val
 		if val:
 			_end_damp = val.linear_damp
-@export var elasticity := 5.0
-@export var damping := 1.0
+
+@export var stretch_lenience := 0
+@export var tension_speed := 4000
 
 @onready var pid_controller: PIDController = %PIDController
 
@@ -32,7 +33,8 @@ func _ready() -> void:
 func _on_stretch(stretch_length: float, start_direction: Vector2, end_direction: Vector2, delta: float) -> void:
 	if not start_body or not end_body:
 		return
-	if not stretch_length:
+	stretch_length -= stretch_lenience
+	if stretch_length <= 0:
 		pid_controller.reset()
 		return
 		#start_body.linear_damp = _start_damp
@@ -44,6 +46,7 @@ func _on_stretch(stretch_length: float, start_direction: Vector2, end_direction:
 	#end_body.linear_damp = _end_damp + extra_damping
 	
 	#var force := stretch_length * elasticity 
-	var force := 4000 * -pid_controller.update(stretch_length, 0, delta)
+	var force := tension_speed * -pid_controller.update(stretch_length, 0, delta)
+	#var dir := end_body.global_position.direction_to(start_body.global_position + rope.offset)
 	start_body.apply_impulse(force * start_direction * delta, start_body.global_transform.basis_xform(rope.offset))
 	end_body.apply_central_impulse(force * -end_direction * delta)

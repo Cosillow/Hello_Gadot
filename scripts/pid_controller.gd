@@ -69,7 +69,7 @@ func update(current_value: float, target_value: float, delta: float) -> float:
 	return clampf(result, output_min, output_max)
 
 
-func angle_difference(a: float, b: float) -> float:
+func diff_angle(a: float, b: float) -> float:
 	return fmod((a - b + 540.0), 360.0) - 180.0  # calculate modular difference, and remap to [-180, 180]
 
 
@@ -78,7 +78,8 @@ func update_angle(current_angle: float, target_angle: float, delta: float) -> fl
 		push_error("delta must be greater than 0")
 		return 0.0
 
-	var error := angle_difference(target_angle, current_angle)
+	var error := diff_angle(target_angle, current_angle)
+	#print(error)
 
 	# calculate P term
 	var P := proportional_gain * error
@@ -88,10 +89,10 @@ func update_angle(current_angle: float, target_angle: float, delta: float) -> fl
 	var I := integral_gain * integration_stored
 
 	# calculate both D terms
-	var error_rate_of_change := angle_difference(error, error_last) / delta
+	var error_rate_of_change := diff_angle(error, error_last) / delta
 	error_last = error
 
-	var value_rate_of_change := angle_difference(current_angle, value_last) / delta
+	var value_rate_of_change := diff_angle(current_angle, value_last) / delta
 	value_last = current_angle
 
 	# choose D term to use
