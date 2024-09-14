@@ -18,7 +18,7 @@ func _input(event: InputEvent) -> void:
 
 func _shoot_rope() -> void:
 	#var dir := (get_global_mouse_position() - position).normalized() # TODO: both options?
-	var dir := Input.get_vector("move_left", "move_righ`t", "move_up", "move_down")
+	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var sling := ROPE_SLING.instantiate() as RopeSling
 	var planet := PLANET.instantiate() as RigidBody2D
 	
