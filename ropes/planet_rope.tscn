@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://dpc8admuqreqp"]
+
+[ext_resource type="Script" path="res://scripts/tension_rope.gd" id="1_q263d"]
+[ext_resource type="Script" path="res://scripts/pid_controller.gd" id="2_y24uw"]
+[ext_resource type="Script" path="res://scripts/rope_connection.gd" id="3_4mq18"]
+[ext_resource type="Script" path="res://ropes/character_rope.gd" id="4_w0l6y"]
+[ext_resource type="PackedScene" uid="uid://dacvoc0g37u2r" path="res://scenes/planet.tscn" id="5_vfmfp"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_44k6v"]
+friction = 0.0
+bounce = 0.25
+
+[node name="TensionRope" type="Node2D"]
+script = ExtResource("1_q263d")
+
+[node name="PIDController2" type="Node" parent="."]
+script = ExtResource("2_y24uw")
+proportional_gain = 2.0
+integral_gain = 1.0
+output_max = 0.0
+integral_saturation = 1.0
+
+[node name="RopeConnection2" type="Node" parent="." node_paths=PackedStringArray("rope", "end_body", "pid_controller")]
+script = ExtResource("3_4mq18")
+rope = NodePath("../AttachmentRope2")
+end_body = NodePath("../Planet")
+pid_controller = NodePath("../PIDController2")
+tension_speed = 1000
+
+[node name="AttachmentRope2" type="Node2D" parent="."]
+script = ExtResource("4_w0l6y")
+bounce = 1.0
+body_affect_factor = 2.0
+layer = 0
+mask = 4
+rope_length = 600.0
+segment_number = 30
+gravity = Vector2(0, 0)
+tightness = 10
+damping = 0.99
+end_strength = 0.98
+color = Color(0.487387, 0.689304, 0.26823, 1)
+width = 10.0
+
+[node name="Planet" parent="." instance=ExtResource("5_vfmfp")]
+mass = 0.301
+physics_material_override = SubResource("PhysicsMaterial_44k6v")
+linear_damp_mode = 1
+linear_damp = 0.3

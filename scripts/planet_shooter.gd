@@ -1,8 +1,8 @@
 class_name PlanetShooter
 extends SpaceController
 
-const ROPE_SLING = preload("res://scenes/rope_sling.tscn")
-const PLANET = preload("res://scenes/planet.tscn")
+
+@export var ropes: Array[PackedScene] = []
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	super(state)
@@ -15,13 +15,13 @@ func _input(event: InputEvent) -> void:
 		#call_deferred("_shoot_rope")
 		_shoot_rope()
 
-func _shoot_rope() -> void:
+func _shoot_rope(rope_I: float = 0) -> void:
 	#var dir := (get_global_mouse_position() - position).normalized() # TODO: both options?
 	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	var sling := ROPE_SLING.instantiate() as RopeSling
-	var planet := PLANET.instantiate() as RigidBody2D
+	if not dir:
+		dir = linear_velocity.normalized()
+	var sling := ropes[rope_I].instantiate() as TensionRope
 	
 	sling.init_glob_body_pos = global_position + dir * 200
-	sling.add_child(planet)
 	add_child(sling)
 	sling.shoot(dir * 800) #+ linear_velocity

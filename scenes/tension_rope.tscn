@@ -1,11 +1,11 @@
 [gd_scene load_steps=5 format=3 uid="uid://cnxgpjtbdx04j"]
 
-[ext_resource type="Script" path="res://scripts/rope_sling.gd" id="1_cnc1a"]
+[ext_resource type="Script" path="res://scripts/tension_rope.gd" id="1_cnc1a"]
 [ext_resource type="Script" path="res://ropes/character_rope.gd" id="1_qparc"]
 [ext_resource type="Script" path="res://scripts/pid_controller.gd" id="2_ape6j"]
 [ext_resource type="Script" path="res://scripts/rope_connection.gd" id="2_tenbj"]
 
-[node name="RopeSling" type="Node2D"]
+[node name="TensionRope" type="Node2D"]
 script = ExtResource("1_cnc1a")
 
 [node name="PIDController" type="Node" parent="."]
