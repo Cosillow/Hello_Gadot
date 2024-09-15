@@ -1,3 +1,4 @@
+@tool
 class_name RopeSling
 extends Node2D
 

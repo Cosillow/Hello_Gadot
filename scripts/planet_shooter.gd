@@ -4,7 +4,6 @@ extends SpaceController
 const ROPE_SLING = preload("res://scenes/rope_sling.tscn")
 const PLANET = preload("res://scenes/planet.tscn")
 
-
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	super(state)
 	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")

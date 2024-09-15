@@ -1,25 +1,40 @@
 extends Node2D
 
-@onready var bordered_cam: Camera2D = %BorderedCam
+@export var camera: Camera2D = null
 
-@onready var world_boundry: StaticBody2D = %WorldBoundry
+var _curr_zoom: Vector2
 
 func _ready() -> void:
-	var center := bordered_cam.get_screen_center_position()
-	bordered_cam.custom_viewport
+	assert(camera)
+	_curr_zoom = camera.zoom
+	_move_boundaries(true)
 	
-	var camera_size := get_viewport().get_visible_rect().size / bordered_cam.zoom
+func _process(_delta: float) -> void:
+	if _curr_zoom != camera.zoom:
+		_curr_zoom = camera.zoom
+		_move_boundaries()
+	
+func _move_boundaries(is_init := false) -> void:
+	var center := camera.get_screen_center_position()
+	camera.custom_viewport
+	
+	var camera_size := get_viewport().get_visible_rect().size / camera.zoom
 	var camera_rect := Rect2(center - camera_size / 2, camera_size)
 	var x_from_center := -camera_rect.size.x / 2
 	var y_from_center := -camera_rect.size.y / 2
-	print(camera_size)
 	var positions := [[Vector2.DOWN, y_from_center], [Vector2.UP, y_from_center], [Vector2.RIGHT, x_from_center], [Vector2.LEFT, x_from_center]]
 	
 	for i in range(len(positions)):
-		var shape := CollisionShape2D.new()
-		var boundary := WorldBoundaryShape2D.new()
-		world_boundry.add_child(shape)
-		boundary.normal = positions[i][0]
-		#boundary.distance = positions[i][1]
-		shape.position += boundary.normal * positions[i][1]
-		shape.shape = boundary
+		# TODO: only add on init...
+		var shape: CollisionShape2D
+		var boundary: WorldBoundaryShape2D
+		if is_init:
+			shape = CollisionShape2D.new()
+			boundary = WorldBoundaryShape2D.new() 
+			add_child(shape, false, Node.INTERNAL_MODE_FRONT)
+			shape.shape = boundary
+		else:
+			shape = get_child(i, true) as CollisionShape2D
+			boundary = shape.shape as WorldBoundaryShape2D
+		boundary.normal = positions[i][0] as Vector2
+		shape.position = boundary.normal * positions[i][1] as Vector2

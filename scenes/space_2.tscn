@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="1_ky3cx"]
 [ext_resource type="Script" path="res://scripts/planet_shooter.gd" id="1_w5eih"]
 [ext_resource type="Script" path="res://scripts/world_control.gd" id="3_j0b5w"]
+[ext_resource type="Script" path="res://scripts/camera_world.gd" id="3_ml2wh"]
 [ext_resource type="Script" path="res://scripts/menu.gd" id="5_7i1r3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_skp3n"]
@@ -12,8 +13,6 @@ bounce = 0.5
 [sub_resource type="CircleShape2D" id="CircleShape2D_pocej"]
 radius = 100.0
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tkwvr"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kn076"]
 
 [sub_resource type="Theme" id="Theme_x741b"]
@@ -21,7 +20,7 @@ default_font_size = 50
 
 [node name="Space" type="Node2D"]
 
-[node name="MyController" type="RigidBody2D" parent="."]
+[node name="PlanetShooter" type="RigidBody2D" parent="."]
 unique_name_in_owner = true
 z_index = 5
 position = Vector2(2, 55)
@@ -36,48 +35,29 @@ script = ExtResource("1_w5eih")
 thrust = 5000.0
 metadata/_edit_group_ = true
 
-[node name="Polygon2D2" type="Polygon2D" parent="MyController"]
+[node name="Polygon2D2" type="Polygon2D" parent="PlanetShooter"]
 position = Vector2(-1.13233, 4.5293)
 scale = Vector2(1.34972, 1.34972)
 color = Color(0.346342, 0.183389, 0.0283619, 1)
 polygon = PackedVector2Array(-50, -52, -1, -73, 57, -45, 76, 0, 39, 64, -36, 65, -74, 5)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MyController"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlanetShooter"]
 position = Vector2(-1, 6)
 shape = SubResource("CircleShape2D_pocej")
-
-[node name="BallSpawner" type="Node2D" parent="."]
-unique_name_in_owner = true
 
 [node name="world" type="Node2D" parent="."]
 script = ExtResource("3_j0b5w")
 
-[node name="WorldBoundry" type="StaticBody2D" parent="world"]
-position = Vector2(1740, 0)
-rotation = -1.57079
+[node name="WorldBoundry" type="StaticBody2D" parent="world" node_paths=PackedStringArray("camera")]
+position = Vector2(8, 0)
+script = ExtResource("3_ml2wh")
+camera = NodePath("../Camera2D")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry"]
-shape = SubResource("WorldBoundaryShape2D_tkwvr")
+[node name="Camera2D" type="Camera2D" parent="world"]
+zoom = Vector2(0.28, 0.28)
 
-[node name="WorldBoundry2" type="StaticBody2D" parent="world"]
-position = Vector2(-2097, 0)
-rotation = 1.57079
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry2"]
-shape = SubResource("WorldBoundaryShape2D_tkwvr")
-
-[node name="WorldBoundry3" type="StaticBody2D" parent="world"]
-position = Vector2(-103, -1362)
-rotation = 3.14159
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry3"]
-shape = SubResource("WorldBoundaryShape2D_tkwvr")
-
-[node name="WorldBoundry4" type="StaticBody2D" parent="world"]
-position = Vector2(-103, 831)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="world/WorldBoundry4"]
-shape = SubResource("WorldBoundaryShape2D_tkwvr")
+[node name="BallSpawner" type="Node2D" parent="world"]
+unique_name_in_owner = true
 
 [node name="Parallax2D" type="Parallax2D" parent="world"]
 visible = false
@@ -175,8 +155,3 @@ layout_mode = 2
 theme = SubResource("Theme_x741b")
 max_value = 1000.0
 step = 0.001
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(-163, -268)
-zoom = Vector2(0.28, 0.28)
-position_smoothing_enabled = true
