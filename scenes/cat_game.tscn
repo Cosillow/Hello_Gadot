@@ -66,8 +66,7 @@ script = ExtResource("3_qjhig")
 
 [node name="PIDController" type="Node" parent="Stick/RopeSling"]
 script = ExtResource("2_serx7")
-proportional_gain = 10.0
-derivative_gain = 80.0
+proportional_gain = 50.0
 output_max = 0.0
 
 [node name="RopeConnection" type="Node" parent="Stick/RopeSling" node_paths=PackedStringArray("rope", "start_body", "end_body", "pid_controller")]
@@ -77,7 +76,7 @@ start_body = NodePath("../..")
 end_body = NodePath("../Planet")
 pid_controller = NodePath("../PIDController")
 stretch_lenience = 100
-tension_speed = 20000
+tension_speed = 5000
 
 [node name="AttachmentRope" type="Node2D" parent="Stick/RopeSling" node_paths=PackedStringArray("attached")]
 position = Vector2(10, -784)

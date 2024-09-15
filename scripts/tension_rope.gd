@@ -16,17 +16,16 @@ func _get_configuration_warnings() -> PackedStringArray:
 	
 	var special_num := 3
 	for c in get_children():
-		if c is not RigidBody2D:
-			# can't have more than one of must haves
-			var illegal := \
-					(c is RopeConnection and rope_connection) or \
-					(c is MyRope and attachment_rope) or \
-					(c is RigidBody2D and attached_body)
-			var legal := RopeConnection or MyRope or RigidBody2D
-			if illegal:
-				warnings.append("You must only have one of each type: `RigidBody2d`, `MyRope`, `RopeConnection`")
-			elif legal:
-				special_num -= 1
+		# can't have more than one of must haves
+		var illegal := \
+				(c is RopeConnection and rope_connection) or \
+				(c is MyRope and attachment_rope) or \
+				(c is RigidBody2D and attached_body)
+		var legal := c is RopeConnection or c is MyRope or c is RigidBody2D
+		if illegal:
+			warnings.append("You must only have one of each type: `RigidBody2d`, `MyRope`, `RopeConnection`")
+		elif legal:
+			special_num -= 1
 	if special_num != 0:
 		warnings.append("You must add a child of type: `RigidBody2d`, `MyRope`, `RopeConnection`")
 	
@@ -36,7 +35,6 @@ func _ready() -> void:
 	for c in get_children():
 		var warnings := _get_configuration_warnings()
 		if warnings:
-			error_string(2)
 			push_error(warnings)
 			assert(0)
 	
