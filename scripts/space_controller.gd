@@ -1,7 +1,7 @@
 class_name SpaceController
 extends RigidBody2D
 
-@export var thrust: float = 1000 :
+@export var thrust: float = 5000 :
 	set(val):
 		thrust = val
 		_thrust_vector = Vector2(val, val)

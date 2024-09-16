@@ -1,0 +1,69 @@
+[gd_scene load_steps=7 format=3 uid="uid://bhjl3oto53muv"]
+
+[ext_resource type="Script" path="res://scenes/jetpacker.gd" id="1_c2jcx"]
+[ext_resource type="Script" path="res://scripts/pid_controller.gd" id="2_1ab05"]
+[ext_resource type="Script" path="res://scripts/camera_world.gd" id="3_feufi"]
+[ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="4_o1pwv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m2dv3"]
+size = Vector2(132, 195)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_50jyk"]
+size = Vector2(56, 102)
+
+[node name="Jetpackin" type="Node2D"]
+
+[node name="Justin" type="RigidBody2D" parent="." node_paths=PackedStringArray("hover_pid")]
+script = ExtResource("1_c2jcx")
+hover_pid = NodePath("PIDController")
+hover_thrust = 2000.0
+
+[node name="Polygon2D" type="Polygon2D" parent="Justin"]
+position = Vector2(-7, 9)
+polygon = PackedVector2Array(-57, -61, -56, 40, -1, 39, 0, -62)
+
+[node name="Polygon2D2" type="Polygon2D" parent="Justin"]
+polygon = PackedVector2Array(10, -112, -7, -96, 7, -74, -2, -43, -3, 53, 20, 71, 79, 29, 91, 77, 123, 74, 97, 60, 86, 18, 43, 30, 114, 16, 97, -4, 101, 12, 40, 20, 47, -17, 20, -73, 36, -97)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Justin"]
+position = Vector2(58, -15.5)
+shape = SubResource("RectangleShape2D_m2dv3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Justin"]
+position = Vector2(-36, -2)
+shape = SubResource("RectangleShape2D_50jyk")
+
+[node name="PIDController" type="Node" parent="Justin"]
+script = ExtResource("2_1ab05")
+proportional_gain = 3000.0
+integral_gain = 100.0
+derivative_gain = 3.0
+integral_saturation = 100.0
+
+[node name="world" type="Node2D" parent="."]
+
+[node name="WorldBoundry" type="StaticBody2D" parent="world" node_paths=PackedStringArray("camera")]
+unique_name_in_owner = true
+script = ExtResource("3_feufi")
+camera = NodePath("../BorderedCam")
+
+[node name="Parallax2D" type="Parallax2D" parent="world"]
+visible = false
+z_index = -1
+repeat_size = Vector2(1000, 0)
+repeat_times = 4
+
+[node name="Sprite2D3" type="Sprite2D" parent="world/Parallax2D"]
+self_modulate = Color(0.572549, 0, 1, 0.427451)
+position = Vector2(466.74, -333.32)
+scale = Vector2(2.91, 52.12)
+texture = ExtResource("4_o1pwv")
+
+[node name="Sprite2D4" type="Sprite2D" parent="world/Parallax2D"]
+self_modulate = Color(0.160784, 1, 1, 0.376471)
+position = Vector2(4.23999, -333.32)
+scale = Vector2(2.91, 52.12)
+texture = ExtResource("4_o1pwv")
+
+[node name="BorderedCam" type="Camera2D" parent="world"]
+zoom = Vector2(0.315, 0.315)
