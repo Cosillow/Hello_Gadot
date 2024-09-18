@@ -13,10 +13,12 @@ size = Vector2(56, 102)
 
 [node name="Jetpackin" type="Node2D"]
 
-[node name="Justin" type="RigidBody2D" parent="." node_paths=PackedStringArray("hover_pid")]
+[node name="Justin" type="RigidBody2D" parent="." node_paths=PackedStringArray("vertical_pid", "angle_pid")]
 script = ExtResource("1_c2jcx")
-hover_pid = NodePath("PIDController")
-hover_thrust = 2000.0
+vertical_pid = NodePath("VerticalPID")
+angle_pid = NodePath("AnglePID")
+hover_thrust = 5000.0
+angle_torque = 100000.0
 
 [node name="Polygon2D" type="Polygon2D" parent="Justin"]
 position = Vector2(-7, 9)
@@ -33,12 +35,20 @@ shape = SubResource("RectangleShape2D_m2dv3")
 position = Vector2(-36, -2)
 shape = SubResource("RectangleShape2D_50jyk")
 
-[node name="PIDController" type="Node" parent="Justin"]
+[node name="VerticalPID" type="Node" parent="Justin"]
 script = ExtResource("2_1ab05")
-proportional_gain = 3000.0
-integral_gain = 100.0
-derivative_gain = 3.0
-integral_saturation = 100.0
+proportional_gain = 0.5
+integral_gain = 1.0
+derivative_gain = 0.01
+output_max = 0.0
+integral_saturation = 1.0
+
+[node name="AnglePID" type="Node" parent="Justin"]
+script = ExtResource("2_1ab05")
+proportional_gain = 0.3
+integral_gain = 0.2
+derivative_gain = 0.01
+integral_saturation = 0.2
 
 [node name="world" type="Node2D" parent="."]
 
