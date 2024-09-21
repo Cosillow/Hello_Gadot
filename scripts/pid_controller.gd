@@ -70,7 +70,8 @@ func update(current_value: float, target_value: float, delta: float) -> float:
 
 
 func diff_angle(a: float, b: float) -> float:
-	return fmod((a - b + 540.0), 360.0) - 180.0  # calculate modular difference, and remap to [-180, 180]
+	return a -b
+	#return fmod((a - b + 540.0), 360.0) - 180.0  # calculate modular difference, and remap to [-180, 180]
 
 
 func update_angle(current_angle: float, target_angle: float, delta: float) -> float:
