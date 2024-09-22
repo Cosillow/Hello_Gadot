@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://bhjl3oto53muv"]
+[gd_scene load_steps=16 format=3 uid="uid://bhjl3oto53muv"]
 
 [ext_resource type="Script" path="res://scenes/jetpacker.gd" id="1_c2jcx"]
 [ext_resource type="Script" path="res://scripts/pid_controller.gd" id="2_1ab05"]
 [ext_resource type="Script" path="res://scripts/camera_world.gd" id="3_feufi"]
 [ext_resource type="Texture2D" uid="uid://0rdv2jrsa4w8" path="res://icon.svg" id="4_o1pwv"]
+[ext_resource type="Script" path="res://scenes/ball_spawner.gd" id="4_prqas"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ffu4h"]
 bounce = 0.3
@@ -155,6 +156,7 @@ derivative_gain = 0.4
 integral_saturation = 1.0
 
 [node name="world" type="Node2D" parent="."]
+script = ExtResource("4_prqas")
 
 [node name="WorldBoundry" type="StaticBody2D" parent="world" node_paths=PackedStringArray("camera")]
 unique_name_in_owner = true
