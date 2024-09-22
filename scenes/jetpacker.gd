@@ -23,20 +23,25 @@ var angle_location: Vector2 :
 var _thrust_vector: Vector2
 var _intended_location: Vector2
 var _player_angle_aim: float
-var _last_boost_amt: float
+var _og_particle_boost: float
 
 func _ready() -> void:
 	assert(vertical_pid and hover_angle_pid)
 	_thrust_vector = Vector2(thrust, thrust)
+	_og_particle_boost = boost.amount
 
-func _process(delta: float) -> void:
-	boost.amount = _last_boost_amt
+#func _process(delta: float) -> void:
+	#print(constant_force)
+	#if constant_force == Vector2.ZERO:
+		
 	
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	# boost jetpack
 	if Input.is_action_pressed("jump"):
 		state.apply_central_force(_thrust_vector * transform.x)
-		_last_boost_amt = boost.amount
+		boost.emitting = true
+	else:
+		boost.emitting = false
 	
 	if Input.is_action_just_pressed("rope"):
 		state.apply_central_impulse(_thrust_vector * -transform.x)
