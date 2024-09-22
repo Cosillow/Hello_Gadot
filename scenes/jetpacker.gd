@@ -15,6 +15,8 @@ extends RigidBody2D
 		_thrust_vector = Vector2(val, val)
 
 @onready var boost: GPUParticles2D = %Boost
+@onready var side_thrust_boost_body: GPUParticles2D = %SideThrustBoostBody
+@onready var side_thrust_boost_back_jpak: GPUParticles2D = %SideThrustBoostBackJpak
 
 var angle_location: Vector2 :
 	get:
@@ -60,8 +62,15 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	
 	# TODO: the angle is wrong. it goes the wrong way at (-1, 0)
 	_player_angle_aim = rad_to_deg(global_position.angle_to_point(get_global_mouse_position())) #dir.angle() #lerpf(_player_angle_aim, dir.angle(), state.step)
-	torque = player_angle_torque * player_controlled_angle_pid.update_angle(rotation_degrees, _player_angle_aim, state.step)
-	state.apply_torque(torque)
+	var pid_factor :=  player_controlled_angle_pid.update_angle(rotation_degrees, _player_angle_aim, state.step)
+	state.apply_torque(player_angle_torque * pid_factor)
+	if pid_factor > 0:
+		side_thrust_boost_back_jpak.emitting = true
+		side_thrust_boost_body.emitting = false
+	elif pid_factor < 0:
+		side_thrust_boost_body.emitting = true
+		side_thrust_boost_back_jpak.emitting = false
+	
 	
 	#print(rotation_degrees, "  and  ", _player_angle_aim)
 		
